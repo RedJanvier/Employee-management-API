@@ -4,7 +4,9 @@
   "description": "Task Force challenge number 3",
   "main": "server.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "nodemon server",
+    "start": "node server"
   },
   "repository": {
     "type": "git",
