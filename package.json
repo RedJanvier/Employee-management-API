@@ -1,0 +1,28 @@
+{
+  "name": "employee-management-rest-api",
+  "version": "1.0.0",
+  "description": "Task Force challenge number 3",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git"
+  },
+  "keywords": [
+    "employee"
+  ],
+  "author": "RedJanvier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/issues"
+  },
+  "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
