@@ -23,7 +23,10 @@
   "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^7.17.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
