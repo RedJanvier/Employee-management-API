@@ -3,8 +3,8 @@ const testConnection = require('./config/database')();
 
 const app = express();
 
-app.route('/api/v1', (req, res, next) => {
-    res.status(200).json({ success: true, message: 'Successfully connected to the API' });
-});
+app.use(express.json());
+
+app.use('/api/v1/employees', require('./routes/employees'));
 
 module.exports = app;
