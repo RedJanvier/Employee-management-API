@@ -5,4 +5,8 @@ router
     .route('/')
     .post(employees.create);
 
+router
+    .route('/:uuid')
+    .delete(employees.delete);
+
 module.exports = router;

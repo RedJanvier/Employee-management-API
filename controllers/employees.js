@@ -68,3 +68,26 @@ exports.create = (req, res) => {
             });
         });
 };
+
+exports.delete = async (req, res) => {
+    const { uuid } = req.params;
+    try {
+
+        const employee = await Employee.destroy({ where: { uuid } });
+
+        if(employee === 0) { throw new Error('Employee not found'); }
+
+        res.status(200).json({ 
+            success: true,
+            message: `${employee} Employees successfully deleted`
+        });
+
+    } catch(err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+        
+    }
+}
