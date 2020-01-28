@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.POSTGRES_URI);
+exports.conn = new Sequelize(process.env.POSTGRES_URI);
 
-const testConnection = () => {
+exports.testConnection = () => {
     sequelize
         .authenticate()
         .then(() => {
@@ -11,5 +11,3 @@ const testConnection = () => {
             console.error('Unable to connect to the database:', err);
         });
 }
-
-module.exports = testConnection;
