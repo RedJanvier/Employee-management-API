@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/database').conn;
+const utils = require('../utils/employees');
 
 const Employee = db.define('employee', {
   uuid: {
@@ -12,16 +13,23 @@ const Employee = db.define('employee', {
     allowNull: false,
     validate: {
       notNull: {
-        msg: 'Please enter your name'
+        args: true,
+        msg: 'Name must be provided'
       }
     }
   },
   email: {
     type: DataTypes.STRING,
-    unique: true,
+    unique: {
+      args: true,
+      msg: 'Email already exists'
+    },
     allowNull: false,
     validate: {
-      isEmail: true
+      isEmail: {
+        args: true,
+        msg: 'Email is not a valid email'
+      }
     }
   },
   status: {
@@ -39,7 +47,10 @@ const Employee = db.define('employee', {
     allowNull: false,
     unique: true,
     validate: {
-      len: [16, 16]
+      len: {
+        args: [16, 16],
+        msg: 'Nid must be a valid Rwandan National ID'
+      }
     }
   },
   phone: {
@@ -47,7 +58,10 @@ const Employee = db.define('employee', {
     allowNull: false,
     unique: true,
     validate: {
-      is: /^(25)?0?7[3 2 8]{1}[0-9]{7}$/
+      is: {
+        args: /^(25)?0?7[3 2 8]{1}[0-9]{7}$/,
+        msg: 'Phone number must be a valid Rwandan Phone'
+      }
     }
   },
   position: {
@@ -56,7 +70,7 @@ const Employee = db.define('employee', {
     validate: {
       isIn: {
         args: [['manager', 'developer', 'designer']],
-        msg: 'Position must be a Manager, Developer or Designer'
+        msg: 'Position must be a manager, developer or designer'
       }
     }
   },
@@ -64,7 +78,17 @@ const Employee = db.define('employee', {
     type: DataTypes.DATE,
     allowNull: false,
     validate: {
-      isDate: true
+      isDate: {
+        args: true,
+        msg: 'Birthday must be a valid date (timestamp)'
+      },
+      ageRestriction(){
+        if (this.birthday) {
+          if (utils.checkAge(this.birthday) < 18) {
+            throw new Error('Employee must be atleast 18 yrs old.');
+          }
+        }
+      }
     }
   }
 });
