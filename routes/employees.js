@@ -10,4 +10,8 @@ router
     .put(employees.edit)
     .delete(employees.delete);
 
+router
+    .route('/:uuid/:status')
+    .put(employees.status);
+
 module.exports = router;

@@ -127,3 +127,34 @@ exports.edit = (req, res) => {
         });
     });
 };
+
+exports.status = (req, res )=> {
+    let { uuid, status } = req.params;
+    if (status === 'activate' || status === 'suspend'){
+        try {
+            db.query(`UPDATE employees SET status = :status WHERE employees.uuid = :uuid`, { 
+            replacements: { 
+                status: (status === 'activate')? 'active' : 'inactive',
+                uuid: uuid
+            }, type: QueryTypes.UPDATE })
+            .then(() => {
+                (status === 'suspend')? status = 'suspende': '';
+                res.status(201).json({
+                    success: true,
+                    message: `Employee was ${status}d successfully`
+                });
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(304).json({
+                success: false,
+                message: 'Employee not activated'
+            });
+        }
+    } else {
+        res.status(404).json({
+            success: false,
+            message: 'Route does not exist. Try activate or suspend'
+        });
+    }
+};
