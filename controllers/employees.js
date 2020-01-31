@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const { QueryTypes } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
+const utils = require('../utils/employees');
 
 exports.create = (req, res) => {
     db.sync({ logging: false })
@@ -95,7 +96,8 @@ exports.delete = async (req, res) => {
 
 exports.edit = (req, res) => {
     const { uuid } = req.params;
-    const { body } = req.body;
+    const { body } = req;
+
     db.sync({ logging: false })
     .then(async() => {
         try {
