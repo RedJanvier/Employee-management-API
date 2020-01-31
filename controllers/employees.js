@@ -154,7 +154,7 @@ exports.status = (req, res )=> {
     } else {
         res.status(404).json({
             success: false,
-            message: 'Route does not exist. Try activate or suspend'
+            message: 'Route does not exist'
         });
     }
 };
