@@ -10,7 +10,7 @@ router
     .delete(employees.delete);
 
 router
-    .route('/:uuid/activate')
-    .put(employees.activate);
+    .route('/:uuid/:status')
+    .put(employees.status);
 
 module.exports = router;

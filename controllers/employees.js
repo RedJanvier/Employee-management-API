@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { QueryTypes } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 
@@ -92,26 +93,33 @@ exports.delete = async (req, res) => {
     }
 }
 
-exports.activate = (req, res )=> {
-    const { uuid } = req.params;
-    try {
-        sequelize.query('UPDATE employees SET status = :status WHERE employees.uuid = :uuid', { 
-        replacements: { 
-            status: 'active',
-            uuid: uuid
-        }, type: sequelize.QueryTypes.UPDATE })
-        .then(user => {
-            console.log(user);
-            res.status(201).json({
-                success: true,
-                message: `${user[0].name} was activated successfully`
+exports.status = (req, res )=> {
+    let { uuid, status } = req.params;
+    if (status === 'activate' || status === 'suspend'){
+        try {
+            db.query(`UPDATE employees SET status = :status WHERE employees.uuid = :uuid`, { 
+            replacements: { 
+                status: (status === 'activate')? 'active' : 'inactive',
+                uuid: uuid
+            }, type: QueryTypes.UPDATE })
+            .then(() => {
+                (status === 'suspend')? status = 'suspende': '';
+                res.status(201).json({
+                    success: true,
+                    message: `Employee was ${status}d successfully`
+                });
             });
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(304).json({
+        } catch (error) {
+            console.log(error);
+            res.status(304).json({
+                success: false,
+                message: 'Employee not activated'
+            });
+        }
+    } else {
+        res.status(404).json({
             success: false,
-            message: 'Employee not activated'
+            message: 'Route does not exist. Try activate or suspend'
         });
     }
 }
