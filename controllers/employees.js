@@ -91,3 +91,27 @@ exports.delete = async (req, res) => {
         
     }
 }
+
+exports.activate = (req, res )=> {
+    const { uuid } = req.params;
+    try {
+        sequelize.query('UPDATE employees SET status = :status WHERE employees.uuid = :uuid', { 
+        replacements: { 
+            status: 'active',
+            uuid: uuid
+        }, type: sequelize.QueryTypes.UPDATE })
+        .then(user => {
+            console.log(user);
+            res.status(201).json({
+                success: true,
+                message: `${user[0].name} was activated successfully`
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(304).json({
+            success: false,
+            message: 'Employee not activated'
+        });
+    }
+}

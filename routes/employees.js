@@ -9,4 +9,8 @@ router
     .route('/:uuid')
     .delete(employees.delete);
 
+router
+    .route('/:uuid/activate')
+    .put(employees.activate);
+
 module.exports = router;
