@@ -7,6 +7,7 @@ router
 
 router
     .route('/:uuid')
+    .put(employees.edit)
     .delete(employees.delete);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { QueryTypes } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 
@@ -90,4 +91,37 @@ exports.delete = async (req, res) => {
         });
         
     }
-}
+};
+
+exports.edit = (req, res) => {
+    const { uuid } = req.params;
+    const { body } = req.body;
+    db.sync({ logging: false })
+    .then(async() => {
+        try {
+    
+            const employee = await Employee.update(body, { where: { uuid } });
+            
+            if (!employee[0]) { throw new Error('Employee not created'); }
+
+            await res.status(200).json({ 
+                success: true,
+                message: `Employee successfully modified`
+            });
+            
+        } catch (error) {
+            
+            await res.status(304).json({ 
+                success: false,
+                message: error.message
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: 'Error occurred on the server; Employee not modified'
+        });
+    });
+};
