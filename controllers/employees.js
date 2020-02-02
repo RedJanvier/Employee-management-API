@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, Op } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 const utils = require('../utils/employees');
@@ -157,4 +157,31 @@ exports.status = (req, res )=> {
             message: 'Route does not exist'
         });
     }
+};
+
+exports.search = (req, res) => {
+    Object.keys(req.query).map(async q => {
+        try {
+            
+            let where = {};
+            where[q] = {
+                [Op.like]: `%${req.query[q]}%`
+            };
+
+            const employees = await Employee.findAll({ where });
+            
+            if (employees.length < 1) throw new Error(`No employee found of that ${q}`);
+
+            await res.status(200).json({
+                success: true,
+                employees
+            });
+
+        } catch (error) {
+            res.status(404).json({
+                success: false,
+                message: error.message
+            });
+        }
+    });
 };

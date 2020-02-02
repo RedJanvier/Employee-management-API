@@ -14,4 +14,8 @@ router
     .route('/:uuid/:status')
     .put(employees.status);
 
+router
+    .route('/search')
+    .post(employees.search);
+
 module.exports = router;
