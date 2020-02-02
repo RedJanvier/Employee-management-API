@@ -48,14 +48,6 @@ exports.create = (req, res) => {
                 sendMail(config).catch(console.error);
 
             } catch (error) {
-                console.log(error);
-                if(error.code != 23505){
-                    await Employee.destroy({
-                        where: {
-                            name: req.body.name
-                        }
-                    });
-                }
                 await res.status(400).json({
                     success: false,
                     message: error.errors[0].message
