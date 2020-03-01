@@ -32,6 +32,16 @@ const Employee = db.define('employee', {
       }
     }
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notNull: {
+        args: true,
+        msg: 'Password must be provided'
+      }
+    }
+  },
   status: {
     type: DataTypes.STRING,
     allowNull:false,

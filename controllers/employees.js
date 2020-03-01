@@ -14,10 +14,6 @@ exports.create = (req, res) => {
             try {
                 const employee = await Employee.create(req.body);
                 
-                res.status(201).json({
-                    success: true,
-                    message: `Employee ${employee.name} successfully created`
-                });
                 const config = {
                     mailserver: {
                         host: 'smtp.gmail.com',
@@ -49,8 +45,14 @@ exports.create = (req, res) => {
                     console.log(`Preview: ${nodemailer.getTestMessageUrl(info)}`);
                 };
                 sendMail(config).catch(console.error);
+                
+                res.status(201).json({
+                    success: true,
+                    message: `Employee ${employee.name} successfully created`
+                });
 
             } catch (error) {
+                
                 await res.status(400).json({
                     success: false,
                     message: error.errors[0].message
