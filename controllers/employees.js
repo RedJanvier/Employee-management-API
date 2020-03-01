@@ -4,6 +4,9 @@ const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 const utils = require('../utils/employees');
 
+// @desc    Create an employee
+// Route    POST /api/v1/employees
+// Access   Public
 exports.create = (req, res) => {
     db.sync({ logging: false })
         .then(async() => {
@@ -63,6 +66,9 @@ exports.create = (req, res) => {
         });
 };
 
+// @desc    Delete an employee
+// Route    DELETE /api/v1/employees/:id
+// Access   Public
 exports.delete = async (req, res) => {
     const { uuid } = req.params;
     try {
@@ -86,6 +92,9 @@ exports.delete = async (req, res) => {
     }
 };
 
+// @desc    Edit an employee
+// Route    PUT /api/v1/employees/:id
+// Access   Public
 exports.edit = (req, res) => {
     const { uuid } = req.params;
     const { body } = req;
@@ -120,6 +129,9 @@ exports.edit = (req, res) => {
     });
 };
 
+// @desc    Suspend/Activate an employee
+// Route    PUT /api/v1/employees/:id/:status
+// Access   Public
 exports.status = (req, res )=> {
     let { uuid, status } = req.params;
     if (status === 'activate' || status === 'suspend'){
@@ -151,6 +163,9 @@ exports.status = (req, res )=> {
     }
 };
 
+// @desc    Search for employees
+// Route    PUT /api/v1/employees/search
+// Access   Public
 exports.search = (req, res) => {
     Object.keys(req.query).map(async q => {
         try {

@@ -4,6 +4,10 @@ const employees = require('../controllers/employees');
 router
     .route('/')
     .post(employees.create);
+    
+router
+    .route('/search')
+    .put(employees.search);
 
 router
     .route('/:uuid')
@@ -13,9 +17,5 @@ router
 router
     .route('/:uuid/:status')
     .put(employees.status);
-
-router
-    .route('/search')
-    .post(employees.search);
 
 module.exports = router;
