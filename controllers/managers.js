@@ -12,7 +12,10 @@ exports.create = (req, res) => {
     db.sync({ logging: false })
         .then(async () => {
             try {
-                const manager = await Manager.create(req.body);
+                const manager = await Manager.create({
+                    ...req.body,
+                    password: await utils.encryptPassword(req.body.password)
+                });
 
                 await utils.sendEmail(
                     'confirmation email',
@@ -20,12 +23,12 @@ exports.create = (req, res) => {
                     true
                 );
 
-                return await res.status(201).json({
+                return res.status(201).json({
                     success: true,
-                    message: `Manager ${manager.name} successfully created`
+                    message: `Please check your inbox to confirm your email!`
                 });
             } catch (error) {
-                await res.status(400).json({
+                return res.status(400).json({
                     success: false,
                     message: error.errors[0].message
                 });
