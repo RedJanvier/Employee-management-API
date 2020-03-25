@@ -38,7 +38,7 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
             : `
             <p>Dear ${to}, </p>
             <p>This is a confirmation email and to confirm; <b>Please click the link below: </b></p>
-            <h2><a href="http://localhost:4000/api/v1/manager/confirm/${confirmationToken(
+            <h2><a href="http://localhost:4000/api/v1/managers/confirm/${confirmationToken(
                 to
             )}">Confirmation Email Link</a></h2>
             <p>Regards</p>
