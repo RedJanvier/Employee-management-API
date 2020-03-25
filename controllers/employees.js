@@ -10,11 +10,7 @@ exports.create = (req, res) => {
     db.sync({ logging: false })
         .then(async () => {
             try {
-                console.log(await utils.encryptPassword(req.body.password));
-                const employee = await Employee.create({
-                    ...req.body,
-                    password: await utils.encryptPassword(req.body.password)
-                });
+                const employee = await Employee.create(req.body);
 
                 await utils.sendEmail('communicaiton', employee.email);
 
