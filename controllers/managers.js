@@ -3,6 +3,7 @@ const db = require('../config/database').conn;
 const Manager = require('../models/managers');
 const utils = require('../utils/employees');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // @desc    Create a manager
 // Route    POST /api/v1/managers/signup
@@ -80,6 +81,63 @@ exports.confirm = async (req, res) => {
             res.status(500).json({
                 success: false,
                 message: 'Error occurred on the server; Email not confirmed'
+            });
+        });
+};
+
+// @desc    Login a manager
+// Route    POST /api/v1/managers/login
+// Access   Public
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    db.sync({ logging: false })
+        .then(async () => {
+            try {
+                let token;
+                const manager = await Manager.findOne({ where: { email } });
+
+                if (!manager.dataValues) {
+                    throw new Error(`Manager doesn't exist!`);
+                }
+                const isValid = await bcrypt.compare(
+                    password,
+                    manager.dataValues.password
+                );
+                if (isValid) {
+                    token = jwt.sign(
+                        {
+                            name: manager.dataValues.name,
+                            uuid: manager.dataValues.uuid,
+                            email: manager.dataValues.email,
+                            status: manager.dataValues.status
+                        },
+                        process.env.JWT_LOGIN_SECRET,
+                        {
+                            expiresIn: '10h'
+                        }
+                    );
+                } else {
+                    throw new Error('Email or Password incorrect!');
+                }
+
+                return res.status(200).json({
+                    success: true,
+                    data: token
+                });
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({
+                    success: false,
+                    data: error.message
+                });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                success: false,
+                message: 'Error occurred on the server;'
             });
         });
 };
