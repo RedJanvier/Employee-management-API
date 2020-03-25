@@ -8,9 +8,13 @@ const sendMail = async ({ mailserver, mail }) => {
     console.log(`Preview: ${nodemailer.getTestMessageUrl(info)}`);
 };
 
-const confirmationToken = email => {
-    const token = jwt.sign(email, process.env.JWT_CONFIRMATION_SECRET);
+exports.signToken = (data, secret, duration) => {
+    const token = jwt.sign(data, secret, duration);
     return token;
+};
+exports.verifyToken = (token, secret) => {
+    const data = jwt.verify(token, secret);
+    return data;
 };
 
 exports.checkAge = birthday => {
@@ -38,8 +42,10 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
             : `
             <p>Dear ${to}, </p>
             <p>This is a confirmation email and to confirm; <b>Please click the link below: </b></p>
-            <h2><a href="http://localhost:4000/api/v1/managers/confirm/${confirmationToken(
-                to
+            <h2><a href="http://localhost:4000/api/v1/managers/confirm/${this.signToken(
+                to,
+                process.env.JWT_CONFIRMATION_SECRET,
+                60 * 15
             )}">Confirmation Email Link</a></h2>
             <p>Regards</p>
             <p>Manager</p>`
@@ -49,7 +55,6 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
             host: 'smtp.gmail.com',
             port: 587,
             secure: false,
-            // name: 'TrendD',
             auth: {
                 user: process.env.MAIL,
                 pass: process.env.MAIL_PASS
@@ -65,4 +70,8 @@ exports.encryptPassword = async password => {
     const salt = await bcrypt.genSalt(12);
     const hash = await bcrypt.hash(password, salt);
     return hash;
+};
+exports.decryptPassword = async (password, hash) => {
+    const isValid = await bcrypt.compare(password, hash);
+    return isValid;
 };

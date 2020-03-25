@@ -1,9 +1,6 @@
-// const { QueryTypes, Op } = require('sequelize');
 const db = require('../config/database').conn;
 const Manager = require('../models/managers');
 const utils = require('../utils/employees');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 // @desc    Create a manager
 // Route    POST /api/v1/managers/signup
@@ -47,7 +44,7 @@ exports.create = (req, res) => {
 // Access   Private
 exports.confirm = async (req, res) => {
     const { confirmationToken } = req.params;
-    const email = jwt.verify(
+    const email = utils.verifyToken(
         confirmationToken,
         process.env.JWT_CONFIRMATION_SECRET
     );
@@ -103,12 +100,12 @@ exports.login = async (req, res) => {
                 if (!manager.dataValues) {
                     throw new Error(`Manager doesn't exist!`);
                 }
-                const isValid = await bcrypt.compare(
+                const isValid = await utils.decryptPassword(
                     password,
                     manager.dataValues.password
                 );
                 if (isValid) {
-                    token = jwt.sign(
+                    token = utils.signToken(
                         {
                             name: manager.dataValues.name,
                             uuid: manager.dataValues.uuid,
@@ -116,9 +113,7 @@ exports.login = async (req, res) => {
                             status: manager.dataValues.status
                         },
                         process.env.JWT_LOGIN_SECRET,
-                        {
-                            expiresIn: '10h'
-                        }
+                        '3h'
                     );
                 } else {
                     throw new Error('Email or Password incorrect!');
