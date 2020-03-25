@@ -62,6 +62,8 @@ exports.confirm = async (req, res) => {
                     throw new Error(`Manager's email not confirmed`);
                 }
 
+                await utils.sendEmail('communication', email);
+
                 await res.status(200).json({
                     success: true,
                     message: `Thank you for confirming your email!`
