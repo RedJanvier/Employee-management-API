@@ -47,6 +47,7 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
                 process.env.JWT_CONFIRMATION_SECRET,
                 60 * 15
             )}">Confirmation Email Link</a></h2>
+            <p><b>The confirmation link is valid for 15 minutes</b></p>
             <p>Regards</p>
             <p>Manager</p>`
     };
