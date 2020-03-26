@@ -1,88 +1,78 @@
-# Project Title
+# Task-Force---Employee-management-REST-API-Back-End-3
 
-One Paragraph of project description goes here
+This is a Task-Force challenge number 3 which was to create an employee management REST API.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on your own live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You need to have:
 
-```
-Give examples
-```
+-   NodeJs Runtime if not [download it here](https://nodejs.org/en/)
+-   PostgreSQL Database if not [download it here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+-   Git Version Control if not [download it here](https://git-scm.com/downloads)
+
+To check The Prerequisites are installed you can use these terminal commands:
+
+For NodeJs:
+
+> node --version
+
+For Postgres:
+
+> psql --version
+
+For Git:
+
+> git --version
 
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Clone the Repo with the terminal command:
 
 ```
-Give the example
+git clone https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git
 ```
 
-And repeat
+then make a file called .env using sample.env by replacing with your own data.
+
+Run the command inside the cloned directory:
 
 ```
-until finished
+npm install
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+To start the app in development run the command:
 
 ```
-Give an example
+npm run dev
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+-   [NodeJS](https://nodejs.org/en/) - The javascript runtime used
+-   [ExpressJS](http://expressjs.com//) - The web framework used
+-   [NPM](http://npmjs.com/) - Dependency Management
+-   [PostgreSQL](https://www.postgres.org/) - Database system used
+-   [Sequelize](http://sequelize.org/) - Database management system (DBMS) used
+-   [NodeMailer](https://nodemailer.com/about/) - Email client system used
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+-   **RedJanvier** - _elite-members-api-mongo_ - [RedJanvier](https://github.com/RedJanvier/)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+<!-- ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+-   Hat tip to anyone whose code was used
+-   Inspiration
+-   etc -->
