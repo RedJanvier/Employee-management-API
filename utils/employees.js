@@ -8,7 +8,7 @@ const sendMail = async ({ mailserver, mail }) => {
     console.log(`Preview: ${nodemailer.getTestMessageUrl(info)}`);
 };
 
-exports.signToken = (data, secret, duration) => {
+exports.signToken = (data, secret, duration = null) => {
     const token = jwt.sign(data, secret, duration);
     return token;
 };
@@ -44,8 +44,7 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
             <p>This is a confirmation email and to confirm; <b>Please click the link below: </b></p>
             <h2><a href="http://localhost:4000/api/v1/managers/confirm/${this.signToken(
                 to,
-                process.env.JWT_CONFIRMATION_SECRET,
-                60 * 15
+                process.env.JWT_CONFIRMATION_SECRET
             )}">Confirmation Email Link</a></h2>
             <p><b>The confirmation link is valid for 15 minutes</b></p>
             <p>Regards</p>
@@ -64,7 +63,10 @@ exports.sendEmail = async (type, to, toConfirm = false) => {
         mail
     };
 
-    return await sendMail(config).catch(console.error);
+    return await sendMail(config).catch(err => {
+        console.error(err);
+        throw err;
+    });
 };
 
 exports.encryptPassword = async password => {

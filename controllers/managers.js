@@ -13,10 +13,9 @@ exports.create = (req, res) => {
                     ...req.body,
                     password: await utils.encryptPassword(req.body.password)
                 });
-
                 await utils.sendEmail(
                     'confirmation email',
-                    manager.email,
+                    manager.dataValues.email,
                     true
                 );
 
@@ -25,6 +24,7 @@ exports.create = (req, res) => {
                     message: `Please check your inbox to confirm your email!`
                 });
             } catch (error) {
+                console.log(error);
                 return res.status(400).json({
                     success: false,
                     message: error.errors[0].message
@@ -32,6 +32,7 @@ exports.create = (req, res) => {
             }
         })
         .catch(err => {
+            console.log(err);
             res.status(500).json({
                 success: false,
                 message: 'Manager not created'
