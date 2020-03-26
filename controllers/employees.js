@@ -12,7 +12,7 @@ exports.create = (req, res) => {
             try {
                 const employee = await Employee.create(req.body);
 
-                await utils.sendEmail('communicaiton', employee.email);
+                await utils.sendEmail('communication', employee.email);
 
                 return await res.status(201).json({
                     success: true,
