@@ -100,6 +100,9 @@ exports.login = async (req, res) => {
                 if (!manager.dataValues) {
                     throw new Error(`Manager doesn't exist!`);
                 }
+                if (!manager.dataValues.confirmed) {
+                    throw new Error(`Please verify your email to login`);
+                }
                 const isValid = await utils.decryptPassword(
                     password,
                     manager.dataValues.password
