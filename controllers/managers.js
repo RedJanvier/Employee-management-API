@@ -14,9 +14,8 @@ exports.create = (req, res) => {
                     password: await utils.encryptPassword(req.body.password)
                 });
                 await utils.sendEmail(
-                    'confirmation email',
-                    manager.dataValues.email,
-                    true
+                    'confirmation',
+                    manager.dataValues.email
                 );
 
                 return res.status(201).json({
@@ -101,6 +100,9 @@ exports.login = async (req, res) => {
                 if (!manager.dataValues) {
                     throw new Error(`Manager doesn't exist!`);
                 }
+                if (!manager.dataValues.confirmed) {
+                    throw new Error(`Please verify your email to login`);
+                }
                 const isValid = await utils.decryptPassword(
                     password,
                     manager.dataValues.password
@@ -137,6 +139,78 @@ exports.login = async (req, res) => {
             res.status(500).json({
                 success: false,
                 message: 'Error occurred on the server;'
+            });
+        });
+};
+
+// @desc    Request to reset a manager's Password
+// Route    POST /api/v1/managers/reset
+// Access   Public
+exports.requestReset = (req, res) => {
+    db.sync({ logging: false })
+        .then(async () => {
+            try {
+                const { email } = req.body;
+                const manager = await Manager.findOne({ where: { email } });
+
+                if (!manager.dataValues.email) {
+                    throw new Error(`Unable to reset manager's password!`);
+                }
+
+                await utils.sendEmail(
+                    'password reset',
+                    manager.dataValues.email
+                );
+
+                return res.status(201).json({
+                    success: true,
+                    message: `Please check your inbox to reset your password!`
+                });
+            } catch (error) {
+                throw error;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                success: false,
+                message: 'Unable to request a password reset'
+            });
+        });
+};
+
+// @desc    Confirm a manager's password reset
+// Route    POST /api/v1/managers/reset/:token
+// Access   Public
+exports.confirmReset = async (req, res) => {
+    const newPassword = await utils.encryptPassword(req.body.password);
+    const email = utils.verifyToken(
+        req.params.token,
+        process.env.JWT_CONFIRMATION_SECRET
+    );
+
+    db.sync({ logging: false })
+        .then(async () => {
+            try {
+                const manager = await Manager.update({ password: newPassword }, { where: { email } });
+
+                if (!manager[0]) {
+                    throw new Error(`Manager's password not reset`);
+                }
+
+                return res.status(200).json({
+                    success: true,
+                    message: `Thank you! You can now use your new password to login!`
+                });
+            } catch (error) {
+                throw error;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                success: false,
+                message: 'Error occurred on the server; Email not confirmed'
             });
         });
 };
