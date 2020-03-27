@@ -33,6 +33,46 @@ exports.create = (req, res) => {
         });
 };
 
+// @desc    Create many employees from excelsheet
+// Route    POST /api/v1/employees/many
+// Access   Public
+exports.createMany = async (req, res) => {
+
+    try {
+        await utils.uploadXL(req);
+        res.status(200).json('Successfully stored employees list');
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Unsuccessful! Unable to store employees list');
+    }
+
+
+    // db.sync({ logging: false })
+    //     .then(async () => {
+    //         try {
+    //             const employee = await Employee.create(req.body);
+
+    //             await utils.sendEmail('communication', employee.email);
+
+    //             return await res.status(201).json({
+    //                 success: true,
+    //                 message: `Employee ${employee.name} successfully created`
+    //             });
+    //         } catch (error) {
+    //             await res.status(400).json({
+    //                 success: false,
+    //                 message: error.errors[0].message
+    //             });
+    //         }
+    //     })
+    //     .catch(err => {
+    //         res.status(500).json({
+    //             success: false,
+    //             message: 'Employee not created'
+    //         });
+    //     });
+};
+
 // @desc    Delete an employee
 // Route    DELETE /api/v1/employees/:id
 // Access   Public

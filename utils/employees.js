@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 const sendMail = async ({ mailserver, mail }) => {
     let transporter = nodemailer.createTransport(mailserver);
@@ -100,4 +101,24 @@ exports.encryptPassword = async password => {
 exports.decryptPassword = async (password, hash) => {
     const isValid = await bcrypt.compare(password, hash);
     return isValid;
+};
+
+exports.uploadXL = (req) => {
+    if (!req.files) {
+        console.log('No files were uploaded.');
+        return false;
+    }
+
+    const sampleFile = req.files.employees;
+
+    const uploadPath = __dirname + '/uploads/' + sampleFile.name;
+
+    return sampleFile.mv(uploadPath, err => {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+
+        return true;
+    });
 };
