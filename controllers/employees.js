@@ -4,6 +4,7 @@ const Employee = require('../models/employees');
 const utils = require('../utils/employees');
 const xlsx = require('xlsx');
 const path = require('path');
+
 // @desc    Create an employee
 // Route    POST /api/v1/employees
 // Access   Public
@@ -78,31 +79,6 @@ exports.createMany = async (req, res) => {
         console.log(error);
         res.status(500).json('Unsuccessful! Unable to store employees list');
     }
-
-    // db.sync({ logging: false })
-    //     .then(async () => {
-    //         try {
-    //             const employee = await Employee.create(req.body);
-
-    //             await utils.sendEmail('communication', employee.email);
-
-    //             return await res.status(201).json({
-    //                 success: true,
-    //                 message: `Employee ${employee.name} successfully created`
-    //             });
-    //         } catch (error) {
-    //             await res.status(400).json({
-    //                 success: false,
-    //                 message: error.errors[0].message
-    //             });
-    //         }
-    //     })
-    //     .catch(err => {
-    //         res.status(500).json({
-    //             success: false,
-    //             message: 'Employee not created'
-    //         });
-    //     });
 };
 
 // @desc    Delete an employee
