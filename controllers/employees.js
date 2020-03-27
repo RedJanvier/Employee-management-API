@@ -2,7 +2,8 @@ const { QueryTypes, Op } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 const utils = require('../utils/employees');
-
+const xlsx = require('xlsx');
+const path = require('path');
 // @desc    Create an employee
 // Route    POST /api/v1/employees
 // Access   Public
@@ -37,15 +38,30 @@ exports.create = (req, res) => {
 // Route    POST /api/v1/employees/many
 // Access   Public
 exports.createMany = async (req, res) => {
-
     try {
         await utils.uploadXL(req);
-        res.status(200).json('Successfully stored employees list');
+        setTimeout(() => {
+            const wb = xlsx.readFile(
+                path.resolve(__dirname, '../uploads/', 'Boo21.xlsx'),
+                { cellDates: true }
+            );
+            const ws = wb.Sheets.Sheet1;
+            const employeesList = xlsx.utils.sheet_to_json(ws).map(entry => ({
+                name: entry.name,
+                email: entry.email,
+                phone: entry.phone,
+                nid: entry.nid,
+                position: entry.position,
+                birthday: entry.birthday,
+                status: entry.status
+            }));
+            console.log(employeesList);
+            res.status(200).json('Successfully stored employees list');
+        }, 100);
     } catch (error) {
         console.log(error);
         res.status(500).json('Unsuccessful! Unable to store employees list');
     }
-
 
     // db.sync({ logging: false })
     //     .then(async () => {

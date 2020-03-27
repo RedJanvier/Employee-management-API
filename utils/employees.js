@@ -111,7 +111,7 @@ exports.uploadXL = (req) => {
 
     const sampleFile = req.files.employees;
 
-    const uploadPath = __dirname + '/uploads/' + sampleFile.name;
+    const uploadPath = path.resolve(__dirname, '../uploads/', 'Boo21.xlsx');
 
     return sampleFile.mv(uploadPath, err => {
         if (err) {
