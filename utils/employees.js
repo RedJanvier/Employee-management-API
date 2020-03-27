@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
-const sendMail = async ({ mailserver, mail }) => {
+const sendMail = ({ mailserver, mail }) => {
     let transporter = nodemailer.createTransport(mailserver);
-    let info = await transporter.sendMail(mail);
+    let info = transporter.sendMail(mail);
     console.log(`Preview: ${nodemailer.getTestMessageUrl(info)}`);
 };
 
@@ -36,9 +37,9 @@ exports.sendEmail = async (type, to) => {
             <p>Dear ${to}, </p>
             <p>This is a confirmation email and to confirm; <b>Please click the link below: </b></p>
             <h2><a href="http://localhost:4000/api/v1/managers/confirm/${this.signToken(
-                    to,
-                    process.env.JWT_CONFIRMATION_SECRET
-                )}">Confirmation Email Link</a></h2>
+                to,
+                process.env.JWT_CONFIRMATION_SECRET
+            )}">Confirmation Email Link</a></h2>
             <p><b>The confirmation link is valid for 15 minutes</b></p>`
         };
     }
@@ -66,9 +67,9 @@ exports.sendEmail = async (type, to) => {
             <p>Dear ${to}, </p>
             <p><b>Please click the link below to reset your password </b></p>
             <h2><a href="http://localhost:4000/api/v1/managers/reset/${this.signToken(
-                    to,
-                    process.env.JWT_CONFIRMATION_SECRET
-                )}">Password Reset Link</a></h2>
+                to,
+                process.env.JWT_CONFIRMATION_SECRET
+            )}">Password Reset Link</a></h2>
             <p><b>The password reset link is valid for 5 minutes</b></p>`
         };
     }
@@ -86,10 +87,7 @@ exports.sendEmail = async (type, to) => {
         mail
     };
 
-    return await sendMail(config).catch(err => {
-        console.error(err);
-        throw err;
-    });
+    return sendMail(config);
 };
 
 exports.encryptPassword = async password => {
@@ -100,4 +98,24 @@ exports.encryptPassword = async password => {
 exports.decryptPassword = async (password, hash) => {
     const isValid = await bcrypt.compare(password, hash);
     return isValid;
+};
+
+exports.uploadXL = req => {
+    if (!req.files) {
+        console.log('No files were uploaded.');
+        return false;
+    }
+
+    const sampleFile = req.files.employees;
+
+    const uploadPath = path.resolve(__dirname, '../uploads/', 'Boo21.xlsx');
+
+    return sampleFile.mv(uploadPath, err => {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+
+        return true;
+    });
 };

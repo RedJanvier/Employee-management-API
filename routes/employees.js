@@ -4,6 +4,10 @@ const employees = require('../controllers/employees');
 router
     .route('/')
     .post(employees.create);
+
+router
+    .route('/many')
+    .post(employees.createMany);
     
 router
     .route('/search')

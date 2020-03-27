@@ -2,6 +2,8 @@ const { QueryTypes, Op } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 const utils = require('../utils/employees');
+const xlsx = require('xlsx');
+const path = require('path');
 
 // @desc    Create an employee
 // Route    POST /api/v1/employees
@@ -31,6 +33,52 @@ exports.create = (req, res) => {
                 message: 'Employee not created'
             });
         });
+};
+
+// @desc    Create many employees from excelsheet
+// Route    POST /api/v1/employees/many
+// Access   Public
+exports.createMany = async (req, res) => {
+    try {
+        await utils.uploadXL(req);
+        setTimeout(() => {
+            const wb = xlsx.readFile(
+                path.resolve(__dirname, '../uploads/', 'Boo21.xlsx'),
+                { cellDates: true }
+            );
+            const ws = wb.Sheets.Sheet1;
+            const employeesList = xlsx.utils.sheet_to_json(ws).map(entry => ({
+                name: entry.name,
+                email: entry.email,
+                phone: entry.phone,
+                nid: entry.nid,
+                position: entry.position,
+                birthday: `${entry.birthday.split('/')[2]}-${
+                    entry.birthday.split('/')[1]
+                }-${entry.birthday.split('/')[0]}`,
+                status: entry.status
+            }));
+
+            employeesList.map(async data => {
+                try {
+                    await db.sync({ logging: false });
+                    const employee = await Employee.create(data);
+                    console.log(employee.email + ' Successfully Created!');
+                    await utils.sendEmail('communication', employee.email);
+
+                    return employee;
+                } catch (error) {
+                    console.log(error);
+                    return null;
+                }
+            });
+
+            res.status(200).json('Successfully stored employees list');
+        }, 100);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Unsuccessful! Unable to store employees list');
+    }
 };
 
 // @desc    Delete an employee
