@@ -71,6 +71,10 @@ See also the list of [contributors](https://github.com/RedJanvier/Task-Force---E
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
+### Documentation
+
+The documentation of full endpoints and all the requirements can be found at the root endpoint of the API or [here](https://documenter.getpostman.com/view/8357211/SzYW2euW?version=latest)
+
 <!-- ## Acknowledgments
 
 -   Hat tip to anyone whose code was used
