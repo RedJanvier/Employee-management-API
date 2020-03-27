@@ -150,6 +150,12 @@ exports.managerLog = (type, payload = null) => {
                     payload.manager
                 } did reset his/her password at ${new Date(Date.now())} ======`
             );
+        case 'login':
+            return console.log(
+                `===== MANAGER LOG: ${
+                    payload.manager
+                } logged into his account at ${new Date(Date.now())} ======`
+            );
         case 'create':
             console.log(
                 `===== MANAGER LOG: ${payload.manager} created a new employee ${
