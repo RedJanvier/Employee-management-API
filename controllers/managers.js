@@ -13,10 +13,12 @@ exports.create = (req, res) => {
                     ...req.body,
                     password: await utils.encryptPassword(req.body.password)
                 });
-                await utils.sendEmail(
-                    'confirmation',
-                    manager.dataValues.email
-                );
+                await utils.sendEmail('confirmation', manager.dataValues.email);
+
+                utils.managerLog('create', {
+                    manager: req.decoded.name,
+                    employee: manager.dataValues.name
+                });
 
                 return res.status(201).json({
                     success: true,
@@ -181,7 +183,7 @@ exports.requestReset = (req, res) => {
 
 // @desc    Confirm a manager's password reset
 // Route    POST /api/v1/managers/reset/:token
-// Access   Public
+// Access   Private
 exports.confirmReset = async (req, res) => {
     const newPassword = await utils.encryptPassword(req.body.password);
     const email = utils.verifyToken(
@@ -192,11 +194,18 @@ exports.confirmReset = async (req, res) => {
     db.sync({ logging: false })
         .then(async () => {
             try {
-                const manager = await Manager.update({ password: newPassword }, { where: { email } });
+                const manager = await Manager.update(
+                    { password: newPassword },
+                    { where: { email } }
+                );
 
                 if (!manager[0]) {
                     throw new Error(`Manager's password not reset`);
                 }
+
+                utils.managerLog('reset', {
+                    manager: req.decoded.name
+                });
 
                 return res.status(200).json({
                     success: true,

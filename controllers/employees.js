@@ -2,12 +2,10 @@ const { QueryTypes, Op } = require('sequelize');
 const db = require('../config/database').conn;
 const Employee = require('../models/employees');
 const utils = require('../utils/employees');
-const xlsx = require('xlsx');
-const path = require('path');
 
 // @desc    Create an employee
 // Route    POST /api/v1/employees
-// Access   Public
+// Access   Private
 exports.create = (req, res) => {
     db.sync({ logging: false })
         .then(async () => {
@@ -15,6 +13,11 @@ exports.create = (req, res) => {
                 const employee = await Employee.create(req.body);
 
                 await utils.sendEmail('communication', employee.email);
+
+                utils.managerLog('create', {
+                    manager: req.decoded.name,
+                    employee: employee.name
+                });
 
                 return await res.status(201).json({
                     success: true,
@@ -37,33 +40,22 @@ exports.create = (req, res) => {
 
 // @desc    Create many employees from excelsheet
 // Route    POST /api/v1/employees/many
-// Access   Public
+// Access   Private
 exports.createMany = async (req, res) => {
     try {
         await utils.uploadXL(req);
         setTimeout(() => {
-            const wb = xlsx.readFile(
-                path.resolve(__dirname, '../uploads/', 'Boo21.xlsx'),
-                { cellDates: true }
-            );
-            const ws = wb.Sheets.Sheet1;
-            const employeesList = xlsx.utils.sheet_to_json(ws).map(entry => ({
-                name: entry.name,
-                email: entry.email,
-                phone: entry.phone,
-                nid: entry.nid,
-                position: entry.position,
-                birthday: `${entry.birthday.split('/')[2]}-${
-                    entry.birthday.split('/')[1]
-                }-${entry.birthday.split('/')[0]}`,
-                status: entry.status
-            }));
+            const employeesList = utils.readXL();
 
             employeesList.map(async data => {
                 try {
                     await db.sync({ logging: false });
                     const employee = await Employee.create(data);
-                    console.log(employee.email + ' Successfully Created!');
+
+                    utils.managerLog('create', {
+                        manager: req.decoded.name,
+                        employee: employee.name
+                    });
                     await utils.sendEmail('communication', employee.email);
 
                     return employee;
@@ -82,8 +74,8 @@ exports.createMany = async (req, res) => {
 };
 
 // @desc    Delete an employee
-// Route    DELETE /api/v1/employees/:id
-// Access   Public
+// Route    DELETE /api/v1/employees/:uuid
+// Access   Private
 exports.delete = async (req, res) => {
     const { uuid } = req.params;
     try {
@@ -92,6 +84,17 @@ exports.delete = async (req, res) => {
         if (employee === 0) {
             throw new Error('Employee not found');
         }
+
+        utils.managerLog('delete', {
+            manager: req.decoded.name,
+            employee: uuid
+        });
+
+        console.log(
+            `===== MANAGER LOG: ${
+                req.decoded.name
+            } deleted ${uuid} at ${Date.now()} ======`
+        );
 
         res.status(200).json({
             success: true,
@@ -107,7 +110,7 @@ exports.delete = async (req, res) => {
 
 // @desc    Edit an employee
 // Route    PUT /api/v1/employees/:id
-// Access   Public
+// Access   Private
 exports.edit = (req, res) => {
     const { uuid } = req.params;
     const { body } = req;
@@ -122,6 +125,11 @@ exports.edit = (req, res) => {
                 if (!employee[0]) {
                     throw new Error('Employee not created');
                 }
+
+                utils.managerLog('edit', {
+                    manager: req.decoded.name,
+                    employee: uuid
+                });
 
                 await res.status(200).json({
                     success: true,
@@ -145,7 +153,7 @@ exports.edit = (req, res) => {
 
 // @desc    Suspend/Activate an employee
 // Route    PUT /api/v1/employees/:id/:status
-// Access   Public
+// Access   Private
 exports.status = (req, res) => {
     let { uuid, status } = req.params;
     if (status === 'activate' || status === 'suspend') {
@@ -161,6 +169,13 @@ exports.status = (req, res) => {
                 }
             ).then(() => {
                 status === 'suspend' ? (status = 'suspende') : '';
+
+                utils.managerLog('status', {
+                    manager: req.decoded.name,
+                    status,
+                    employee: uuid
+                });
+
                 res.status(201).json({
                     success: true,
                     message: `Employee was ${status}d successfully`
@@ -183,7 +198,7 @@ exports.status = (req, res) => {
 
 // @desc    Search for employees
 // Route    PUT /api/v1/employees/search
-// Access   Public
+// Access   Private
 exports.search = (req, res) => {
     Object.keys(req.query).map(async q => {
         try {
@@ -196,8 +211,12 @@ exports.search = (req, res) => {
 
             if (employees.length < 1)
                 throw new Error(`No employee found of that ${q}`);
-            // console.log(employees);
-            await res.status(200).json({
+
+            utils.managerLog('search', {
+                manager: req.decoded.name
+            });
+
+            return res.status(200).json({
                 success: true,
                 data: employees.map(employee => ({
                     ...employee.dataValues,

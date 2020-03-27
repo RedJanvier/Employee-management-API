@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const xlsx = require('xlsx');
 const path = require('path');
 
 const sendMail = ({ mailserver, mail }) => {
@@ -10,7 +11,8 @@ const sendMail = ({ mailserver, mail }) => {
 };
 
 exports.signToken = (data, secret, duration = null) => {
-    const token = jwt.sign(data, secret, duration);
+    const tokenOptions = duration ? { expiresIn: duration } : null;
+    const token = jwt.sign(data, secret, tokenOptions);
     return token;
 };
 exports.verifyToken = (token, secret) => {
@@ -118,4 +120,59 @@ exports.uploadXL = req => {
 
         return true;
     });
+};
+
+exports.readXL = () => {
+    const wb = xlsx.readFile(
+        path.resolve(__dirname, '../uploads/', 'Boo21.xlsx'),
+        { cellDates: true }
+    );
+    const ws = wb.Sheets.Sheet1;
+    const employeesList = xlsx.utils.sheet_to_json(ws).map(entry => ({
+        name: entry.name,
+        email: entry.email,
+        phone: entry.phone,
+        nid: entry.nid,
+        position: entry.position,
+        birthday: `${entry.birthday.split('/')[2]}-${
+            entry.birthday.split('/')[1]
+        }-${entry.birthday.split('/')[0]}`,
+        status: entry.status
+    }));
+    return employeesList;
+};
+
+exports.managerLog = (type, payload = null) => {
+    switch (type) {
+        case 'reset':
+            return console.log(
+                `===== MANAGER LOG: ${
+                    payload.manager
+                } did reset his/her password at ${new Date(Date.now())} ======`
+            );
+        case 'create':
+            console.log(
+                `===== MANAGER LOG: ${payload.manager} created a new employee ${
+                    payload.employee
+                } at ${new Date(Date.now())} ======`
+            );
+        case 'edit':
+            return console.log(
+                `===== MANAGER LOG: ${payload.manager} ${type}d ${
+                    payload.employee
+                } ${new Date(Date.now())} ======`
+            );
+        case 'status':
+            return console.log(
+                `===== MANAGER LOG: ${payload.manager} ${payload.status}d ${
+                    payload.employee
+                } at ${new Date(Date.now())} ======`
+            );
+        case 'search':
+            return console.log(
+                `===== MANAGER LOG: ${
+                    payload.manager
+                } searched for employees at ${new Date(Date.now())} ======`
+            );
+    }
 };
