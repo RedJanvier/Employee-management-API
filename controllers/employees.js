@@ -52,10 +52,26 @@ exports.createMany = async (req, res) => {
                 phone: entry.phone,
                 nid: entry.nid,
                 position: entry.position,
-                birthday: entry.birthday,
+                birthday: `${entry.birthday.split('/')[2]}-${
+                    entry.birthday.split('/')[1]
+                }-${entry.birthday.split('/')[0]}`,
                 status: entry.status
             }));
-            console.log(employeesList);
+
+            employeesList.map(async data => {
+                try {
+                    await db.sync({ logging: false });
+                    const employee = await Employee.create(data);
+                    console.log(employee.email + ' Successfully Created!');
+                    await utils.sendEmail('communication', employee.email);
+
+                    return employee;
+                } catch (error) {
+                    console.log(error);
+                    return null;
+                }
+            });
+
             res.status(200).json('Successfully stored employees list');
         }, 100);
     } catch (error) {
