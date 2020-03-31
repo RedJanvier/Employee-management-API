@@ -124,7 +124,7 @@ exports.login = async (req, res) => {
                     throw new Error('Email or Password incorrect!');
                 }
 
-                utils.managerLog('login', { manager: req.decoded.name });
+                utils.managerLog('login', { manager: manager.dataValues.name });
 
                 return res.status(200).json({
                     success: true,

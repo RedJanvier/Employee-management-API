@@ -16,17 +16,11 @@ You need to have:
 
 To check The Prerequisites are installed you can use these terminal commands:
 
-For NodeJs:
+For NodeJs: ```node --version```
 
-> node --version
+For Postgres: ```psql --version```
 
-For Postgres:
-
-> psql --version
-
-For Git:
-
-> git --version
+For Git: ```git --version```
 
 ### Installing
 
@@ -61,7 +55,7 @@ npm run dev
 -   [Sequelize](http://sequelize.org/) - Database management system (DBMS) used
 -   [NodeMailer](https://nodemailer.com/about/) - Email client system used
 
-## Authors
+## Author
 
 -   **RedJanvier** - _elite-members-api-mongo_ - [RedJanvier](https://github.com/RedJanvier/)
 

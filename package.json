@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon server",
+    "dev": "cross-env NODE_ENV=development nodemon server",
     "start": "node server"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",

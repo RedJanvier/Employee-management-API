@@ -1,9 +1,11 @@
 const Sequelize = require('sequelize');
-exports.conn = new Sequelize(
-    process.env.NODE_ENV === 'development'
-        ? process.env.POSTGRES_URI
-        : process.env.DATABASE_URL
-);
+exports.conn = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+        ssl: false
+    }
+});
 
 exports.testConnection = () => {
     sequelize
