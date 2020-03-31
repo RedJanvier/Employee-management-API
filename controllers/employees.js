@@ -197,37 +197,44 @@ exports.status = (req, res) => {
 };
 
 // @desc    Search for employees
-// Route    PUT /api/v1/employees/search
+// Route    PUT /api/v1/employees/search/:page/:pageSize
 // Access   Private
-exports.search = (req, res) => {
+exports.search = async (req, res) => {
+    const { page, pageSize } = req.query;
+    const offset = (page - 1) * pageSize;
+    const limit = pageSize;
+    
+    page && delete req.query.page;
+    pageSize && delete req.query.pageSize;
+
+    let where = {};
     Object.keys(req.query).map(async q => {
-        try {
-            let where = {};
-            where[q] = {
-                [Op.like]: `%${req.query[q]}%`
-            };
-
-            const employees = await Employee.findAll({ where });
-
-            if (employees.length < 1)
-                throw new Error(`No employee found of that ${q}`);
-
-            utils.managerLog('search', {
-                manager: req.decoded.name
-            });
-
-            return res.status(200).json({
-                success: true,
-                data: employees.map(employee => ({
-                    ...employee.dataValues,
-                    password: null
-                }))
-            });
-        } catch (error) {
-            res.status(404).json({
-                success: false,
-                message: error.message
-            });
-        }
+        where[q] = {
+            [Op.iLike]: `%${req.query[q]}%`
+        };
     });
+
+    try {
+        const employees = await Employee.findAll({ offset, limit, where });
+        const all = await Employee.findAll({ where });
+
+        utils.managerLog('search', {
+            manager: req.decoded.name
+        });
+
+        return res.status(200).json({
+            success: true,
+            found: all.length,
+            data: employees.map(employee => ({
+                ...employee.dataValues,
+                password: null
+            }))
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
 };
