@@ -118,7 +118,10 @@ exports.edit = (req, res) => {
     db.sync({ logging: false })
         .then(async () => {
             try {
-                const employee = await Employee.update(body, {
+                const employee = await Employee.update({
+                    ...body,
+                    updatedAt: new Date()
+                }, {
                     where: { uuid }
                 });
 
@@ -159,11 +162,12 @@ exports.status = (req, res) => {
     if (status === 'activate' || status === 'suspend') {
         try {
             db.query(
-                `UPDATE employees SET status = :status WHERE employees.uuid = :uuid`,
+                `UPDATE employees SET status = :status, "updatedAt" = :updatedAt WHERE employees.uuid = :uuid`,
                 {
                     replacements: {
                         status: status === 'activate' ? 'active' : 'inactive',
-                        uuid: uuid
+                        uuid: uuid,
+                        updatedAt: new Date()
                     },
                     type: QueryTypes.UPDATE
                 }
