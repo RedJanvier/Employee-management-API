@@ -197,7 +197,7 @@ exports.status = (req, res) => {
 };
 
 // @desc    Search for employees
-// Route    PUT /api/v1/employees/search/:page/:pageSize
+// Route    PUT /api/v1/employees/search
 // Access   Private
 exports.search = async (req, res) => {
     const { page, pageSize } = req.query;
