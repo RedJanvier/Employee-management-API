@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "dev": "cross-env NODE_ENV=development nodemon server",
-    "start": "node server"
+    "dev": "cross-env NODE_ENV=development nodemon app",
+    "start": "node app"
   },
   "repository": {
     "type": "git",
