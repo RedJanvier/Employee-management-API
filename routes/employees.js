@@ -1,14 +1,24 @@
-const router = require("express").Router();
-const employees = require("../controllers/employees");
+import { Router } from 'express';
 
-router.route("/").post(employees.create);
+import {
+  create,
+  createMany,
+  search,
+  edit,
+  _delete,
+  changeStatus,
+} from '../controllers/employees';
 
-router.route("/many").post(employees.createMany);
+const router = Router();
 
-router.route("/search").put(employees.search);
+router.route('/').post(create);
 
-router.route("/:uuid").put(employees.edit).delete(employees.delete);
+router.route('/many').post(createMany);
 
-router.route("/:uuid/:status").put(employees.status);
+router.route('/search').put(search);
 
-module.exports = router;
+router.route('/:uuid').put(edit).delete(_delete);
+
+router.route('/:uuid/:status').put(changeStatus);
+
+export default router;

@@ -1,8 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const db = require("../config/database").conn;
-const utils = require("../utils/employees");
+import { Sequelize, DataTypes } from 'sequelize';
 
-const Manager = db.define("manager", {
+import { conn as db } from '../config/database';
+import { checkAge } from '../utils/employees';
+
+const Manager = db.define('manager', {
   uuid: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
@@ -14,7 +15,7 @@ const Manager = db.define("manager", {
     validate: {
       notNull: {
         args: true,
-        msg: "Name must be provided",
+        msg: 'Name must be provided',
       },
     },
   },
@@ -22,13 +23,13 @@ const Manager = db.define("manager", {
     type: DataTypes.STRING,
     unique: {
       args: true,
-      msg: "Email already exists",
+      msg: 'Email already exists',
     },
     allowNull: false,
     validate: {
       isEmail: {
         args: true,
-        msg: "Email is not a valid email",
+        msg: 'Email is not a valid email',
       },
     },
   },
@@ -38,7 +39,7 @@ const Manager = db.define("manager", {
     validate: {
       notNull: {
         args: true,
-        msg: "Password must be provided",
+        msg: 'Password must be provided',
       },
     },
   },
@@ -47,8 +48,8 @@ const Manager = db.define("manager", {
     allowNull: false,
     validate: {
       isIn: {
-        args: [["active", "inactive"]],
-        msg: "Must be Active or Inactive",
+        args: [['active', 'inactive']],
+        msg: 'Must be Active or Inactive',
       },
     },
   },
@@ -59,7 +60,7 @@ const Manager = db.define("manager", {
     validate: {
       len: {
         args: [16, 16],
-        msg: "Nid must be a valid Rwandan National ID",
+        msg: 'Nid must be a valid Rwandan National ID',
       },
     },
   },
@@ -70,13 +71,13 @@ const Manager = db.define("manager", {
     validate: {
       is: {
         args: /^(25)?0?7[3 2 8]{1}[0-9]{7}$/,
-        msg: "Phone number must be a valid Rwandan Phone",
+        msg: 'Phone number must be a valid Rwandan Phone',
       },
     },
   },
   position: {
     type: DataTypes.STRING,
-    defaultValue: "manager",
+    defaultValue: 'manager',
   },
   birthday: {
     type: DataTypes.DATE,
@@ -84,12 +85,12 @@ const Manager = db.define("manager", {
     validate: {
       isDate: {
         args: true,
-        msg: "Birthday must be a valid date (timestamp)",
+        msg: 'Birthday must be a valid date (timestamp)',
       },
       ageRestriction() {
         if (this.birthday) {
-          if (utils.checkAge(this.birthday) < 18) {
-            throw new Error("Employee must be atleast 18 yrs old.");
+          if (checkAge(this.birthday) < 18) {
+            throw new Error('Employee must be atleast 18 yrs old.');
           }
         }
       },
@@ -101,4 +102,4 @@ const Manager = db.define("manager", {
   },
 });
 
-module.exports = Manager;
+export default Manager;

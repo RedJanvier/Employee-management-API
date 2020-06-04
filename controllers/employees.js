@@ -1,39 +1,35 @@
-const { QueryTypes, Op } = require("sequelize");
-const db = require("../config/database").conn;
-const Employee = require("../models/employees");
-const utils = require("../utils/employees");
+import { QueryTypes, Op } from 'sequelize';
+
+import Employee from '../models/employees';
+import * as utils from '../utils/employees';
+import { conn as db } from '../config/database';
 
 // @desc    Create an employee
 // Route    POST /api/v1/employees
 // Access   Private
-exports.create = (req, res) => {
-  db.sync({ logging: false })
+export const create = (req, res) => {
+  return db
+    .sync({ logging: false })
     .then(async () => {
-      try {
-        const employee = await Employee.create(req.body);
+      const employee = await Employee.create(req.body);
 
-        await utils.sendEmail("communication", employee.email);
+      await utils.sendEmail('communication', employee.email);
 
-        utils.managerLog("create", {
-          manager: req.decoded.name,
-          employee: employee.name,
-        });
+      utils.managerLog('create', {
+        manager: req.decoded.name,
+        employee: employee.name,
+      });
 
-        return await res.status(201).json({
-          success: true,
-          message: `Employee ${employee.name} successfully created`,
-        });
-      } catch (error) {
-        await res.status(400).json({
-          success: false,
-          message: error.errors[0].message,
-        });
-      }
+      return res.status(201).json({
+        success: true,
+        message: `Employee ${employee.name} successfully created`,
+      });
     })
     .catch((err) => {
-      res.status(500).json({
+      console.log(err);
+      return res.status(500).json({
         success: false,
-        message: "Employee not created",
+        message: 'Employee not created',
       });
     });
 };
@@ -41,7 +37,7 @@ exports.create = (req, res) => {
 // @desc    Create many employees from excelsheet
 // Route    POST /api/v1/employees/many
 // Access   Private
-exports.createMany = async (req, res) => {
+export const createMany = async (req, res) => {
   try {
     await utils.uploadXL(req);
     setTimeout(() => {
@@ -52,11 +48,11 @@ exports.createMany = async (req, res) => {
           await db.sync({ logging: false });
           const employee = await Employee.create(data);
 
-          utils.managerLog("create", {
+          utils.managerLog('create', {
             manager: req.decoded.name,
             employee: employee.name,
           });
-          await utils.sendEmail("communication", employee.email);
+          await utils.sendEmail('communication', employee.email);
 
           return employee;
         } catch (error) {
@@ -65,27 +61,27 @@ exports.createMany = async (req, res) => {
         }
       });
 
-      res.status(200).json("Successfully stored employees list");
+      res.status(200).json('Successfully stored employees list');
     }, 100);
   } catch (error) {
     console.log(error);
-    res.status(500).json("Unsuccessful! Unable to store employees list");
+    res.status(500).json('Unsuccessful! Unable to store employees list');
   }
 };
 
 // @desc    Delete an employee
 // Route    DELETE /api/v1/employees/:uuid
 // Access   Private
-exports.delete = async (req, res) => {
+export const _delete = async (req, res) => {
   const { uuid } = req.params;
   try {
     const employee = await Employee.destroy({ where: { uuid } });
 
     if (employee === 0) {
-      throw new Error("Employee not found");
+      throw new Error('Employee not found');
     }
 
-    utils.managerLog("delete", {
+    utils.managerLog('delete', {
       manager: req.decoded.name,
       employee: uuid,
     });
@@ -111,7 +107,7 @@ exports.delete = async (req, res) => {
 // @desc    Edit an employee
 // Route    PUT /api/v1/employees/:id
 // Access   Private
-exports.edit = (req, res) => {
+export const edit = (req, res) => {
   const { uuid } = req.params;
   const { body } = req;
 
@@ -129,10 +125,10 @@ exports.edit = (req, res) => {
         );
 
         if (!employee[0]) {
-          throw new Error("Employee not created");
+          throw new Error('Employee not created');
         }
 
-        utils.managerLog("edit", {
+        utils.managerLog('edit', {
           manager: req.decoded.name,
           employee: uuid,
         });
@@ -152,7 +148,7 @@ exports.edit = (req, res) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Error occurred on the server; Employee not modified",
+        message: 'Error occurred on the server; Employee not modified',
       });
     });
 };
@@ -160,24 +156,25 @@ exports.edit = (req, res) => {
 // @desc    Suspend/Activate an employee
 // Route    PUT /api/v1/employees/:id/:status
 // Access   Private
-exports.status = (req, res) => {
-  let { uuid, status } = req.params;
-  if (status === "activate" || status === "suspend") {
+export const changeStatus = (req, res) => {
+  const { uuid } = req.params;
+  let { status } = req.params;
+  if (status === 'activate' || status === 'suspend') {
     try {
       db.query(
         `UPDATE employees SET status = :status, "updatedAt" = :updatedAt WHERE employees.uuid = :uuid`,
         {
           replacements: {
-            status: status === "activate" ? "active" : "inactive",
-            uuid: uuid,
+            status: status === 'activate' ? 'active' : 'inactive',
+            uuid,
             updatedAt: new Date(),
           },
           type: QueryTypes.UPDATE,
         }
       ).then(() => {
-        status === "suspend" ? (status = "suspende") : "";
+        status = status === 'suspend' ? 'suspende' : '';
 
-        utils.managerLog("status", {
+        utils.managerLog('status', {
           manager: req.decoded.name,
           status,
           employee: uuid,
@@ -192,13 +189,13 @@ exports.status = (req, res) => {
       console.log(error);
       res.status(304).json({
         success: false,
-        message: "Employee not activated",
+        message: 'Employee not activated',
       });
     }
   } else {
     res.status(404).json({
       success: false,
-      message: "Route does not exist",
+      message: 'Route does not exist',
     });
   }
 };
@@ -206,16 +203,19 @@ exports.status = (req, res) => {
 // @desc    Search for employees
 // Route    PUT /api/v1/employees/search
 // Access   Private
-exports.search = async (req, res) => {
+export const search = async (req, res) => {
   const { page, pageSize } = req.query;
   const offset = (page - 1) * pageSize;
   const limit = pageSize;
 
-  page && delete req.query.page;
-  pageSize && delete req.query.pageSize;
+  const query = {
+    ...req.query,
+    page: undefined,
+    pageSize: undefined,
+  };
 
-  let where = {};
-  Object.keys(req.query).map(async (q) => {
+  const where = {};
+  Object.keys(query).map(async (q) => {
     where[q] = {
       [Op.iLike]: `%${req.query[q]}%`,
     };
@@ -225,7 +225,7 @@ exports.search = async (req, res) => {
     const employees = await Employee.findAll({ offset, limit, where });
     const all = await Employee.findAll({ where });
 
-    utils.managerLog("search", {
+    utils.managerLog('search', {
       manager: req.decoded.name,
     });
 
@@ -239,7 +239,7 @@ exports.search = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

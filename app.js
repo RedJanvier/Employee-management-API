@@ -1,22 +1,22 @@
-require("dotenv").config();
-const express = require("express");
-const morgan = require("morgan");
-const fileUpload = require("express-fileupload");
-const middlewares = require("./middlewares/employees");
+import morgan from 'morgan';
+import { config } from 'dotenv';
+import express, { json } from 'express';
+import fileUpload from 'express-fileupload';
 
+import managerRoutes from './routes/managers';
+import employeeRoutes from './routes/employees';
+import { checkAuth } from './middlewares/employees';
+
+config();
 const app = express();
-const PORT = process.env.PORT;
+const { PORT } = process.env;
 
-app.use(express.json());
+app.use(json());
 app.use(fileUpload());
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
-app.use(
-  "/api/v1/employees",
-  middlewares.checkAuth,
-  require("./routes/employees")
-);
-app.use("/api/v1/managers", require("./routes/managers"));
+app.use('/api/v1/managers', managerRoutes);
+app.use('/api/v1/employees', checkAuth, employeeRoutes);
 
 app.listen(
   PORT,

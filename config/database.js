@@ -1,19 +1,19 @@
-const Sequelize = require("sequelize");
-exports.conn = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
-  protocol: "postgres",
+import { config } from 'dotenv';
+import Sequelize from 'sequelize';
+
+config();
+export const conn = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
   dialectOptions: {
     ssl: false,
   },
 });
 
-exports.testConnection = () => {
-  sequelize
-    .authenticate()
-    .then(() => {
-      console.log("Connection to the database was successful.");
-    })
+export const testConnection = () => {
+  Sequelize.authenticate()
+    .then(console.log('Connection to the database was successful.'))
     .catch((err) => {
-      console.error("Unable to connect to the database:", err);
+      console.error('Unable to connect to the database:', err);
     });
 };

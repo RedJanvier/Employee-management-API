@@ -1,15 +1,24 @@
-const router = require("express").Router();
-const managers = require("../controllers/managers");
-const middlewares = require("../middlewares/employees");
+import { Router } from 'express';
 
-router.route("/login").post(managers.login);
-router.route("/signup").post(middlewares.checkAuth, managers.create);
-router.route("/reset").post(managers.requestReset);
+import { checkAuth } from '../middlewares/employees';
+import {
+  login,
+  create,
+  requestReset,
+  confirm,
+  confirmReset,
+} from '../controllers/managers';
 
-router.route("/confirm/:confirmationToken").get(managers.confirm);
+const router = Router();
+
+router.route('/login').post(login);
+router.route('/signup').post(checkAuth, create);
+router.route('/reset').post(requestReset);
+
+router.route('/confirm/:confirmationToken').get(confirm);
 router
-  .route("/reset/:token")
+  .route('/reset/:token')
   .get((_, res) => res.sendStatus(400))
-  .post(middlewares.checkAuth, managers.confirmReset);
+  .post(checkAuth, confirmReset);
 
-module.exports = router;
+export default router;
