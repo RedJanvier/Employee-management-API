@@ -10,17 +10,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need to have:
 
--   NodeJs Runtime if not [download it here](https://nodejs.org/en/)
--   PostgreSQL Database if not [download it here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
--   Git Version Control if not [download it here](https://git-scm.com/downloads)
+- NodeJs Runtime if not [download it here](https://nodejs.org/en/)
+- PostgreSQL Database if not [download it here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- Git Version Control if not [download it here](https://git-scm.com/downloads)
 
 To check The Prerequisites are installed you can use these terminal commands:
 
-For NodeJs: ```node --version```
+For NodeJs: `node --version`
 
-For Postgres: ```psql --version```
+For Postgres: `psql --version`
 
-For Git: ```git --version```
+For Git: `git --version`
 
 ### Installing
 
@@ -48,16 +48,16 @@ npm run dev
 
 ## Built With
 
--   [NodeJS](https://nodejs.org/en/) - The javascript runtime used
--   [ExpressJS](http://expressjs.com//) - The web framework used
--   [NPM](http://npmjs.com/) - Dependency Management
--   [PostgreSQL](https://www.postgres.org/) - Database system used
--   [Sequelize](http://sequelize.org/) - Database management system (DBMS) used
--   [NodeMailer](https://nodemailer.com/about/) - Email client system used
+- [NodeJS](https://nodejs.org/en/) - The javascript runtime used
+- [ExpressJS](http://expressjs.com//) - The web framework used
+- [NPM](http://npmjs.com/) - Dependency Management
+- [PostgreSQL](https://www.postgres.org/) - Database system used
+- [Sequelize](http://sequelize.org/) - Database management system (DBMS) used
+- [NodeMailer](https://nodemailer.com/about/) - Email client system used
 
 ## Author
 
--   **RedJanvier** - _elite-members-api-mongo_ - [RedJanvier](https://github.com/RedJanvier/)
+- **RedJanvier** - _elite-members-api-mongo_ - [RedJanvier](https://github.com/RedJanvier/)
 
 See also the list of [contributors](https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git/contributors) who participated in this project.
 

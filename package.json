@@ -37,6 +37,11 @@
     "xlsx": "^0.15.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "eslint": "^7.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.5"
   }
 }
