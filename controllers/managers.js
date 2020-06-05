@@ -1,21 +1,28 @@
-const db = require("../config/database").conn;
-const Manager = require("../models/managers");
-const utils = require("../utils/employees");
+import { conn as db } from '../config/database';
+import Manager from '../models/managers';
+import {
+  encryptPassword,
+  sendEmail,
+  managerLog,
+  verifyToken,
+  decryptPassword,
+  signToken,
+} from '../utils/employees';
 
 // @desc    Create a manager
 // Route    POST /api/v1/managers/signup
 // Access   Public
-exports.create = (req, res) => {
+export const create = (req, res) => {
   db.sync({ logging: false })
     .then(async () => {
       try {
         const manager = await Manager.create({
           ...req.body,
-          password: await utils.encryptPassword(req.body.password),
+          password: await encryptPassword(req.body.password),
         });
-        await utils.sendEmail("confirmation", manager.dataValues.email);
+        await sendEmail('confirmation', manager.dataValues.email);
 
-        utils.managerLog("create", {
+        managerLog('create', {
           manager: req.decoded.name,
           employee: manager.dataValues.name,
         });
@@ -36,7 +43,7 @@ exports.create = (req, res) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Manager not created",
+        message: 'Manager not created',
       });
     });
 };
@@ -44,9 +51,9 @@ exports.create = (req, res) => {
 // @desc    Confirm a manager from email
 // Route    GET /api/v1/managers/confirm/:confirmationToken
 // Access   Private
-exports.confirm = async (req, res) => {
+export const confirm = async (req, res) => {
   const { confirmationToken } = req.params;
-  const email = utils.verifyToken(
+  const email = verifyToken(
     confirmationToken,
     process.env.JWT_CONFIRMATION_SECRET
   );
@@ -65,7 +72,7 @@ exports.confirm = async (req, res) => {
           throw new Error(`Manager's email not confirmed`);
         }
 
-        await utils.sendEmail("communication", email);
+        await sendEmail('communication', email);
 
         await res.status(200).json({
           success: true,
@@ -82,7 +89,7 @@ exports.confirm = async (req, res) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Error occurred on the server; Email not confirmed",
+        message: 'Error occurred on the server; Email not confirmed',
       });
     });
 };
@@ -90,7 +97,7 @@ exports.confirm = async (req, res) => {
 // @desc    Login a manager
 // Route    POST /api/v1/managers/login
 // Access   Public
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   db.sync({ logging: false })
@@ -105,12 +112,12 @@ exports.login = async (req, res) => {
         if (!manager.dataValues.confirmed) {
           throw new Error(`Please verify your email to login`);
         }
-        const isValid = await utils.decryptPassword(
+        const isValid = await decryptPassword(
           password,
           manager.dataValues.password
         );
         if (isValid) {
-          token = utils.signToken(
+          token = signToken(
             {
               name: manager.dataValues.name,
               uuid: manager.dataValues.uuid,
@@ -118,13 +125,13 @@ exports.login = async (req, res) => {
               status: manager.dataValues.status,
             },
             process.env.JWT_LOGIN_SECRET,
-            "3h"
+            '3h'
           );
         } else {
-          throw new Error("Email or Password incorrect!");
+          throw new Error('Email or Password incorrect!');
         }
 
-        utils.managerLog("login", { manager: manager.dataValues.name });
+        managerLog('login', { manager: manager.dataValues.name });
 
         return res.status(200).json({
           success: true,
@@ -142,7 +149,7 @@ exports.login = async (req, res) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Error occurred on the server;",
+        message: 'Error occurred on the server;',
       });
     });
 };
@@ -150,32 +157,28 @@ exports.login = async (req, res) => {
 // @desc    Request to reset a manager's Password
 // Route    POST /api/v1/managers/reset
 // Access   Public
-exports.requestReset = (req, res) => {
+export const requestReset = (req, res) => {
   db.sync({ logging: false })
     .then(async () => {
-      try {
-        const { email } = req.body;
-        const manager = await Manager.findOne({ where: { email } });
+      const { email } = req.body;
+      const manager = await Manager.findOne({ where: { email } });
 
-        if (!manager.dataValues.email) {
-          throw new Error(`Unable to reset manager's password!`);
-        }
-
-        await utils.sendEmail("password reset", manager.dataValues.email);
-
-        return res.status(201).json({
-          success: true,
-          message: `Please check your inbox to reset your password!`,
-        });
-      } catch (error) {
-        throw error;
+      if (!manager.dataValues.email) {
+        throw new Error(`Unable to reset manager's password!`);
       }
+
+      await sendEmail('password reset', manager.dataValues.email);
+
+      return res.status(201).json({
+        success: true,
+        message: `Please check your inbox to reset your password!`,
+      });
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Unable to request a password reset",
+        message: 'Unable to request a password reset',
       });
     });
 };
@@ -183,42 +186,38 @@ exports.requestReset = (req, res) => {
 // @desc    Confirm a manager's password reset
 // Route    POST /api/v1/managers/reset/:token
 // Access   Private
-exports.confirmReset = async (req, res) => {
-  const newPassword = await utils.encryptPassword(req.body.password);
-  const email = utils.verifyToken(
+export const confirmReset = async (req, res) => {
+  const newPassword = await encryptPassword(req.body.password);
+  const email = verifyToken(
     req.params.token,
     process.env.JWT_CONFIRMATION_SECRET
   );
 
   db.sync({ logging: false })
     .then(async () => {
-      try {
-        const manager = await Manager.update(
-          { password: newPassword },
-          { where: { email } }
-        );
+      const manager = await Manager.update(
+        { password: newPassword },
+        { where: { email } }
+      );
 
-        if (!manager[0]) {
-          throw new Error(`Manager's password not reset`);
-        }
-
-        utils.managerLog("reset", {
-          manager: req.decoded.name,
-        });
-
-        return res.status(200).json({
-          success: true,
-          message: `Thank you! You can now use your new password to login!`,
-        });
-      } catch (error) {
-        throw error;
+      if (!manager[0]) {
+        throw new Error(`Manager's password not reset`);
       }
+
+      managerLog('reset', {
+        manager: req.decoded.name,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: `Thank you! You can now use your new password to login!`,
+      });
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json({
         success: false,
-        message: "Error occurred on the server; Email not confirmed",
+        message: 'Error occurred on the server; Email not confirmed',
       });
     });
 };
