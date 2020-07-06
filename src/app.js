@@ -1,3 +1,4 @@
+import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import express, { json } from 'express';
@@ -12,6 +13,7 @@ const app = express();
 const { PORT } = process.env;
 
 app.use(json());
+app.use(helmet());
 app.use(fileUpload());
 app.use(morgan('dev'));
 
