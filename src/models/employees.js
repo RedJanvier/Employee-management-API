@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import { conn as db } from '../config/database';
-import { checkAge } from '../utils/employees';
+import { checkAge } from '../utils';
 
 const Employee = db.define('employee', {
   uuid: {

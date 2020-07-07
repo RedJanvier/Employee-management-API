@@ -1,4 +1,4 @@
-import { verifyToken } from '../utils/employees';
+import { verifyToken } from '../utils';
 
 // eslint-disable-next-line
 export const checkAuth = async (req, res, next) => {

@@ -4,9 +4,8 @@ import { config } from 'dotenv';
 import express, { json } from 'express';
 import fileUpload from 'express-fileupload';
 
-import managerRoutes from './routes/managers';
-import employeeRoutes from './routes/employees';
-import { checkAuth } from './middlewares/employees';
+import routes from './routes';
+import { errorHandler } from './middlewares';
 
 config();
 const app = express();
@@ -17,8 +16,8 @@ app.use(helmet());
 app.use(fileUpload());
 app.use(morgan('dev'));
 
-app.use('/api/v1/managers', managerRoutes);
-app.use('/api/v1/employees', checkAuth, employeeRoutes);
+app.use('/api/v1', routes);
+app.use(errorHandler);
 
 app.listen(
   PORT,
