@@ -1,6 +1,5 @@
 import { Router } from 'express';
-
-import { checkAuth } from '../middlewares/employees';
+import { auth } from '../middlewares';
 import {
   login,
   create,
@@ -12,13 +11,13 @@ import {
 const router = Router();
 
 router.route('/login').post(login);
-router.route('/signup').post(checkAuth, create);
+router.route('/signup').post(auth, create);
 router.route('/reset').post(requestReset);
 
 router.route('/confirm/:confirmationToken').get(confirm);
 router
   .route('/reset/:token')
   .get((_, res) => res.sendStatus(400))
-  .post(checkAuth, confirmReset);
+  .post(auth, confirmReset);
 
 export default router;
