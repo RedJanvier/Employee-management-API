@@ -1,9 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize';
-
 import { conn as db } from '../config/database';
-import { checkAge } from '../utils/employees';
+import { checkAge } from '../utils';
 
-const Manager = db.define('manager', {
+const Employee = db.define('employee', {
   uuid: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
@@ -30,16 +29,6 @@ const Manager = db.define('manager', {
       isEmail: {
         args: true,
         msg: 'Email is not a valid email',
-      },
-    },
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: {
-        args: true,
-        msg: 'Password must be provided',
       },
     },
   },
@@ -77,7 +66,13 @@ const Manager = db.define('manager', {
   },
   position: {
     type: DataTypes.STRING,
-    defaultValue: 'manager',
+    allowNull: false,
+    validate: {
+      isIn: {
+        args: [['developer', 'designer']],
+        msg: 'Position must be a developer or designer',
+      },
+    },
   },
   birthday: {
     type: DataTypes.DATE,
@@ -96,10 +91,6 @@ const Manager = db.define('manager', {
       },
     },
   },
-  confirmed: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
 });
 
-export default Manager;
+export default Employee;

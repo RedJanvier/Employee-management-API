@@ -5,20 +5,16 @@ import {
   createMany,
   search,
   edit,
-  _delete,
+  deleteEmployee,
   changeStatus,
 } from '../controllers/employees';
 
 const router = Router();
 
 router.route('/').post(create);
-
-router.route('/many').post(createMany);
-
 router.route('/search').put(search);
-
-router.route('/:uuid').put(edit).delete(_delete);
-
+router.route('/many').post(createMany);
 router.route('/:uuid/:status').put(changeStatus);
+router.route('/:uuid').put(edit).delete(deleteEmployee);
 
 export default router;
