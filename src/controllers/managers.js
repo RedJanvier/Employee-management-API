@@ -26,6 +26,7 @@ export const create = asyncHandler(async (req, res) => {
   res.status(201).json({
     success: true,
     message: `Please check your inbox to confirm your email!`,
+    data: manager,
   });
 });
 

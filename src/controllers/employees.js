@@ -24,6 +24,7 @@ export const create = asyncHandler(async (req, res) => {
   res.status(201).json({
     success: true,
     message: `Employee ${employee.name} successfully created`,
+    data: employee,
   });
 });
 
@@ -109,13 +110,11 @@ export const changeStatus = asyncHandler(async (req, res) => {
       }
     );
     status = status === 'suspend' ? 'suspende' : '';
-
     managerLog('status', {
       manager: req.decoded.name,
       status,
       employee: uuid,
     });
-
     res.status(201).json({
       success: true,
       message: `Employee was ${status}d successfully`,

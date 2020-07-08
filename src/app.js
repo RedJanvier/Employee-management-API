@@ -1,3 +1,4 @@
+import 'colors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
@@ -19,7 +20,9 @@ app.use(morgan('dev'));
 app.use('/api/v1', routes);
 app.use(errorHandler);
 
-app.listen(
+const server = app.listen(
   PORT,
   console.log(`Server started at http://localhost:${PORT}/api/v1/`)
 );
+
+export { app, server };

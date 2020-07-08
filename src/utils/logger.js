@@ -26,5 +26,5 @@ export const managerLog = (type, payload = null) => {
       break;
     default:
   }
-  console.log(msg);
+  console.log(`${msg}`.blue.underline);
 };

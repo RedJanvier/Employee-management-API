@@ -2,7 +2,8 @@ import { config } from 'dotenv';
 import Sequelize from 'sequelize';
 
 config();
-export const conn = new Sequelize(process.env.DATABASE_URL, {
+const env = process.env.NODE_ENV.toUpperCase();
+export const conn = new Sequelize(process.env[`${env}_DATABASE_URL`], {
   dialect: 'postgres',
   protocol: 'postgres',
   dialectOptions: {

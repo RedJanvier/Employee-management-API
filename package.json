@@ -4,9 +4,11 @@
   "description": "Task Force challenge number 3",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
+    "coverage": "npm run test -- --coverage",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/app",
-    "start": "babel-node src/app"
+    "start": "babel-node src/app",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "colors": "^1.4.0",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -35,18 +38,23 @@
     "pg": "^7.17.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.3",
+    "uuid": "^8.2.0",
     "xlsx": "^0.15.6"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/node": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
+    "@types/uuid": "^8.0.0",
+    "babel-jest": "^26.1.0",
+    "coveralls": "^3.1.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
     "nodemon": "^2.0.2",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "supertest": "^4.0.2"
   }
 }
