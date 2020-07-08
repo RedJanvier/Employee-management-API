@@ -11,7 +11,7 @@ services:
 before_script:
   - psql -c 'CREATE DATABASE igihe2;' -U postgres
   - psql -c 'CREATE TABLE employees (uuid uuid primary key not null, name varchar(255) not null,email varchar(100) not null unique,status varchar(24) not null,nid varchar(255) not null unique,phone varchar(100) not null unique,position varchar(200) not null,birthday date not null,createdAt timestamp not null,updatedAt timestamp not null);' -U postgres
-  - psql -c 'CREATE TABLE managers (uuid uuid primary key not null, name varchar(255) not null,email varchar(100) not null unique,password varchar(255) not null,confirmed bool default f,status varchar(24) not null,nid varchar(255) not null unique,phone varchar(100) not null unique,position varchar(200) not null,birthday date not null,createdAt timestamp not null,updatedAt timestamp not null);' -U postgres'
+  # - psql -c 'CREATE TABLE managers (uuid uuid primary key not null, name varchar(255) not null,email varchar(100) not null unique,password varchar(255) not null,confirmed bool default f,status varchar(24) not null,nid varchar(255) not null unique,phone varchar(100) not null unique,position varchar(200) not null,birthday date not null,createdAt timestamp not null,updatedAt timestamp not null);' -U postgres'
 
 env:
   - DATABASE_URL: postgres://localhost:5432/igihe2
