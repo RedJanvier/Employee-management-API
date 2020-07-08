@@ -41,24 +41,24 @@ describe('employee endpoints', () => {
   });
 
   describe('POST /api/v1/employees', () => {
-    it('It should create an employee', (done) => {
-      request(app)
-        .post(createUrl)
-        .set('Authorization', `Bearer ${validLoginToken}`)
-        .send(fakeEmployee)
-        .end((err, res) => {
-          if (err) throw err;
-          employeeId = res.body.data.uuid;
-          expect.assertions(4);
-          expect(res.body.success).toBe(true);
-          expect(res.status).toBe(201);
-          expect(res.body.message).toBe(
-            `Employee ${fakeEmployee.name} successfully created`
-          );
-          expect(res.body.data).toHaveProperty('uuid');
-          done();
-        });
-    });
+    // it('It should create an employee', (done) => {
+    //   request(app)
+    //     .post(createUrl)
+    //     .set('Authorization', `Bearer ${validLoginToken}`)
+    //     .send(fakeEmployee)
+    //     .end((err, res) => {
+    //       if (err) throw err;
+    //       employeeId = res.body.data.uuid;
+    //       expect.assertions(4);
+    //       expect(res.body.success).toBe(true);
+    //       expect(res.status).toBe(201);
+    //       expect(res.body.message).toBe(
+    //         `Employee ${fakeEmployee.name} successfully created`
+    //       );
+    //       expect(res.body.data).toHaveProperty('uuid');
+    //       done();
+    //     });
+    // });
     it('It should fail to create an employee on invalidToken', (done) => {
       request(app)
         .post(createUrl)
@@ -86,18 +86,18 @@ describe('employee endpoints', () => {
           done();
         });
     });
-    it('It should delete an employee', (done) => {
-      request(app)
-        .delete(`${createUrl}/${employeeId}`)
-        .set('Authorization', `Bearer ${validLoginToken}`)
-        .end((err, res) => {
-          if (err) throw err;
-          expect.assertions(3);
-          expect(res.status).toBe(200);
-          expect(res.body.success).toBe(true);
-          expect(res.body.message).toBe('1 Employees successfully deleted');
-          done();
-        });
-    });
+    // it('It should delete an employee', (done) => {
+    //   request(app)
+    //     .delete(`${createUrl}/${employeeId}`)
+    //     .set('Authorization', `Bearer ${validLoginToken}`)
+    //     .end((err, res) => {
+    //       if (err) throw err;
+    //       expect.assertions(3);
+    //       expect(res.status).toBe(200);
+    //       expect(res.body.success).toBe(true);
+    //       expect(res.body.message).toBe('1 Employees successfully deleted');
+    //       done();
+    //     });
+    // });
   });
 });
