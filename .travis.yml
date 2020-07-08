@@ -8,6 +8,12 @@ node_js:
 services:
   - postgresql
 
+before_script:
+  - psql -c 'CREATE DATABASE igihe2;' -U postgres
+
+env:
+  - DATABASE_URL: postgres://localhost:5432/igihe2
+
 cache:
   npm: false
 
