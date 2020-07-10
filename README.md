@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.svg?branch=develop)](https://travis-ci.org/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3)
 [![Maintainability](https://api.codeclimate.com/v1/badges/19cd4a6e5a087888aa96/maintainability)](https://codeclimate.com/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/badge.svg?branch=ch-refact-server)](https://coveralls.io/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3?branch=ch-refact-server)
+[![Coverage Status](https://coveralls.io/repos/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/badge.svg?branch=develop)](https://coveralls.io/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3?branch=develop)
 
 This is a Task-Force challenge number 3 which was to create an employee management REST API.
 
