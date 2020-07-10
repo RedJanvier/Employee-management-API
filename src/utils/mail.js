@@ -6,7 +6,7 @@ import { signToken } from './token';
 dotenvConfig();
 const { JWT_CONFIRMATION_SECRET, MAIL, MAIL_PASS } = process.env;
 
-const sendMail = (mail) => {
+export const sendMail = (mail) => {
   const mailserver = {
     host: 'smtp.gmail.com',
     port: 587,
@@ -21,7 +21,7 @@ const sendMail = (mail) => {
   return console.log(`Preview: ${getTestMessageUrl(info)}`);
 };
 
-const sendConfirmation = (type, to) => {
+export const sendConfirmation = (type, to) => {
   const mail = {
     from: 'mamager@company.org',
     to,
@@ -34,7 +34,7 @@ const sendConfirmation = (type, to) => {
   sendMail(mail);
 };
 
-const sendCommunication = (type, to) => {
+export const sendCommunication = (type, to) => {
   const mail = {
     from: 'mamager@company.org',
     to,
@@ -44,7 +44,7 @@ const sendCommunication = (type, to) => {
   sendMail(mail);
 };
 
-const sendReset = (type, to) => {
+export const sendReset = (type, to) => {
   const mail = {
     from: 'mamager@company.org',
     to,
