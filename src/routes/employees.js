@@ -6,7 +6,7 @@ import {
   search,
   edit,
   deleteEmployee,
-  changeStatus,
+  changeStatus
 } from '../controllers/employees';
 
 const router = Router();

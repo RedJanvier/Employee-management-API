@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 export const managerLog = (type, payload = null) => {
   const { manager, employee, status } = payload;
   let msg = '===== MANAGER LOG: ';

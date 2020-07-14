@@ -7,7 +7,7 @@ import {
   verifyToken,
   decryptPassword,
   signToken,
-  ErrorResponse,
+  ErrorResponse
 } from '../utils';
 
 // @desc    Create a manager
@@ -16,17 +16,17 @@ import {
 export const create = asyncHandler(async (req, res) => {
   const manager = await Manager.create({
     ...req.body,
-    password: await encryptPassword(req.body.password),
+    password: await encryptPassword(req.body.password)
   });
   await sendEmail('confirmation', manager.dataValues.email);
   managerLog('create', {
     manager: req.decoded.name,
-    employee: manager.dataValues.name,
+    employee: manager.dataValues.name
   });
   res.status(201).json({
     success: true,
     message: `Please check your inbox to confirm your email!`,
-    data: manager,
+    data: manager
   });
 });
 
@@ -49,7 +49,7 @@ export const confirm = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: `Thank you for confirming your email!`,
+    message: `Thank you for confirming your email!`
   });
 });
 
@@ -62,8 +62,10 @@ export const login = asyncHandler(async (req, res) => {
   const { dataValues } = await Manager.findOne({ where: { email } });
   if (!dataValues) throw new ErrorResponse(`Manager doesn't exist!`, 404);
   const { confirmed, name, uuid, status } = dataValues;
-  if (!confirmed)
+  if (!confirmed) {
     throw new ErrorResponse(`Please verify your email first`, 400);
+  }
+
   await decryptPassword(password, dataValues.password);
   const token = signToken(
     { name, uuid, status, email: dataValues.email },
@@ -74,7 +76,7 @@ export const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    data: token,
+    data: token
   });
 });
 
@@ -83,14 +85,14 @@ export const login = asyncHandler(async (req, res) => {
 // Access   Public
 export const requestReset = asyncHandler(async (req, res) => {
   const {
-    dataValues: { email },
+    dataValues: { email }
   } = await Manager.findOne({ where: { email: req.body.email } });
   if (!email) throw new ErrorResponse(`Manager does not exist!`, 404);
   await sendEmail('password reset', email);
 
   res.status(201).json({
     success: true,
-    message: `Please check your inbox to reset your password!`,
+    message: `Please check your inbox to reset your password!`
   });
 });
 
@@ -107,11 +109,11 @@ export const confirmReset = asyncHandler(async (req, res) => {
   const [manager] = await Manager.update({ password }, { where: { email } });
   if (!manager) throw new ErrorResponse(`Manager's password not reset`, 404);
   managerLog('reset', {
-    manager: req.decoded.name,
+    manager: req.decoded.name
   });
 
   res.status(200).json({
     success: true,
-    message: `Thank you! You can now use your new password to login!`,
+    message: `Thank you! You can now use your new password to login!`
   });
 });

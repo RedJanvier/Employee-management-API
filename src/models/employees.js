@@ -6,7 +6,7 @@ const Employee = db.define('employee', {
   uuid: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
-    primaryKey: true,
+    primaryKey: true
   },
   name: {
     type: DataTypes.STRING,
@@ -14,23 +14,23 @@ const Employee = db.define('employee', {
     validate: {
       notNull: {
         args: true,
-        msg: 'Name must be provided',
-      },
-    },
+        msg: 'Name must be provided'
+      }
+    }
   },
   email: {
     type: DataTypes.STRING,
     unique: {
       args: true,
-      msg: 'Email already exists',
+      msg: 'Email already exists'
     },
     allowNull: false,
     validate: {
       isEmail: {
         args: true,
-        msg: 'Email is not a valid email',
-      },
-    },
+        msg: 'Email is not a valid email'
+      }
+    }
   },
   status: {
     type: DataTypes.STRING,
@@ -38,9 +38,9 @@ const Employee = db.define('employee', {
     validate: {
       isIn: {
         args: [['active', 'inactive']],
-        msg: 'Must be Active or Inactive',
-      },
-    },
+        msg: 'Must be Active or Inactive'
+      }
+    }
   },
   nid: {
     type: DataTypes.BIGINT,
@@ -49,9 +49,9 @@ const Employee = db.define('employee', {
     validate: {
       len: {
         args: [16, 16],
-        msg: 'Nid must be a valid Rwandan National ID',
-      },
-    },
+        msg: 'Nid must be a valid Rwandan National ID'
+      }
+    }
   },
   phone: {
     type: DataTypes.STRING,
@@ -60,9 +60,9 @@ const Employee = db.define('employee', {
     validate: {
       is: {
         args: /^(25)?0?7[3 2 8]{1}[0-9]{7}$/,
-        msg: 'Phone number must be a valid Rwandan Phone',
-      },
-    },
+        msg: 'Phone number must be a valid Rwandan Phone'
+      }
+    }
   },
   position: {
     type: DataTypes.STRING,
@@ -70,9 +70,9 @@ const Employee = db.define('employee', {
     validate: {
       isIn: {
         args: [['developer', 'designer']],
-        msg: 'Position must be a developer or designer',
-      },
-    },
+        msg: 'Position must be a developer or designer'
+      }
+    }
   },
   birthday: {
     type: DataTypes.DATE,
@@ -80,7 +80,7 @@ const Employee = db.define('employee', {
     validate: {
       isDate: {
         args: true,
-        msg: 'Birthday must be a valid date (timestamp)',
+        msg: 'Birthday must be a valid date (timestamp)'
       },
       ageRestriction() {
         if (this.birthday) {
@@ -88,9 +88,9 @@ const Employee = db.define('employee', {
             throw new Error('Employee must be atleast 18 yrs old.');
           }
         }
-      },
-    },
-  },
+      }
+    }
+  }
 });
 
 export default Employee;

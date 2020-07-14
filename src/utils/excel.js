@@ -23,7 +23,7 @@ export const uploadXL = (req) => {
 
 export const readXL = () => {
   const wb = readFile(resolve(__dirname, '../uploads/', 'Boo21.xlsx'), {
-    cellDates: true,
+    cellDates: true
   });
   const ws = wb.Sheets.Sheet1;
   const employeesList = utils.sheet_to_json(ws).map((entry) => ({
@@ -35,7 +35,7 @@ export const readXL = () => {
     birthday: `${entry.birthday.split('/')[2]}-${
       entry.birthday.split('/')[1]
     }-${entry.birthday.split('/')[0]}`,
-    status: entry.status,
+    status: entry.status
   }));
   return employeesList;
 };
