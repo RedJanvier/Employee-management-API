@@ -7,7 +7,7 @@ const Manager = db.define('manager', {
   uuid: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
-    primaryKey: true,
+    primaryKey: true
   },
   name: {
     type: DataTypes.STRING,
@@ -15,23 +15,23 @@ const Manager = db.define('manager', {
     validate: {
       notNull: {
         args: true,
-        msg: 'Name must be provided',
-      },
-    },
+        msg: 'Name must be provided'
+      }
+    }
   },
   email: {
     type: DataTypes.STRING,
     unique: {
       args: true,
-      msg: 'Email already exists',
+      msg: 'Email already exists'
     },
     allowNull: false,
     validate: {
       isEmail: {
         args: true,
-        msg: 'Email is not a valid email',
-      },
-    },
+        msg: 'Email is not a valid email'
+      }
+    }
   },
   password: {
     type: DataTypes.STRING,
@@ -39,9 +39,9 @@ const Manager = db.define('manager', {
     validate: {
       notNull: {
         args: true,
-        msg: 'Password must be provided',
-      },
-    },
+        msg: 'Password must be provided'
+      }
+    }
   },
   status: {
     type: DataTypes.STRING,
@@ -49,9 +49,9 @@ const Manager = db.define('manager', {
     validate: {
       isIn: {
         args: [['active', 'inactive']],
-        msg: 'Must be Active or Inactive',
-      },
-    },
+        msg: 'Must be Active or Inactive'
+      }
+    }
   },
   nid: {
     type: DataTypes.BIGINT,
@@ -60,9 +60,9 @@ const Manager = db.define('manager', {
     validate: {
       len: {
         args: [16, 16],
-        msg: 'Nid must be a valid Rwandan National ID',
-      },
-    },
+        msg: 'Nid must be a valid Rwandan National ID'
+      }
+    }
   },
   phone: {
     type: DataTypes.STRING,
@@ -71,13 +71,13 @@ const Manager = db.define('manager', {
     validate: {
       is: {
         args: /^(25)?0?7[3 2 8]{1}[0-9]{7}$/,
-        msg: 'Phone number must be a valid Rwandan Phone',
-      },
-    },
+        msg: 'Phone number must be a valid Rwandan Phone'
+      }
+    }
   },
   position: {
     type: DataTypes.STRING,
-    defaultValue: 'manager',
+    defaultValue: 'manager'
   },
   birthday: {
     type: DataTypes.DATE,
@@ -85,7 +85,7 @@ const Manager = db.define('manager', {
     validate: {
       isDate: {
         args: true,
-        msg: 'Birthday must be a valid date (timestamp)',
+        msg: 'Birthday must be a valid date (timestamp)'
       },
       ageRestriction() {
         if (this.birthday) {
@@ -93,13 +93,13 @@ const Manager = db.define('manager', {
             throw new Error('Employee must be atleast 18 yrs old.');
           }
         }
-      },
-    },
+      }
+    }
   },
   confirmed: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
+    defaultValue: false
+  }
 });
 
 export default Manager;

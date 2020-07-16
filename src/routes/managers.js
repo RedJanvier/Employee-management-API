@@ -5,7 +5,7 @@ import {
   create,
   requestReset,
   confirm,
-  confirmReset,
+  confirmReset
 } from '../controllers/managers';
 
 const router = Router();

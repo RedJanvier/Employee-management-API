@@ -22,5 +22,5 @@ export {
   managerLog,
   readXL,
   uploadXL,
-  ErrorResponse,
+  ErrorResponse
 };

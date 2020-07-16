@@ -23,3 +23,8 @@ checks:
     enabled: false
   identical-code:
     enabled: false
+plugins:
+  eslint:
+    enabled: true
+  config:
+    config: .eslintrc.js

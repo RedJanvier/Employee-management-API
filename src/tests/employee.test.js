@@ -33,7 +33,7 @@ describe('employee endpoints', () => {
     nid: 1199880037471216,
     status: 'active',
     birthday: '1996-01-02',
-    password: '123MyLittleSecret',
+    password: '123MyLittleSecret'
   };
 
   afterAll((done) => {

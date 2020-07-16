@@ -6,9 +6,9 @@ const fakeReq = {
     employees: {
       mv: (path, cb) => {
         return cb(null);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 describe('Excel Tests: ', () => {
   it('It should upload an excel sheet: ', async (done) => {

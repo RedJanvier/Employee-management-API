@@ -9,8 +9,8 @@ export const conn = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
   protocol: 'postgres',
   dialectOptions: {
-    ssl: false,
-  },
+    ssl: false
+  }
 });
 
 export const testConnection = () => {

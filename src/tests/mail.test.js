@@ -4,7 +4,7 @@ import {
   sendCommunication,
   sendConfirmation,
   sendMail,
-  sendReset,
+  sendReset
 } from '../utils/mail';
 
 describe('Email Tests: ', () => {
@@ -38,7 +38,7 @@ describe('Email Tests: ', () => {
       from: 'fakeFrom@mail.fake',
       to: fakeTo,
       subject: 'fake subject',
-      html: `<p>fake body</p>`,
+      html: `<p>fake body</p>`
     };
     const send = sendMail(fakeMail);
     console.log(send);
