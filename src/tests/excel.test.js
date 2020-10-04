@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { uploadXL } from '../utils';
 
 const fakeReq = {

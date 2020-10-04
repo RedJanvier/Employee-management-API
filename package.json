@@ -4,7 +4,7 @@
   "description": "Task Force challenge number 3",
   "main": "app.js",
   "scripts": {
-    "test": "jest --runInBand --forceExit",
+    "test": "jest --forceExit",
     "coverage": "npm run test -- --coverage",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/app",
     "start": "babel-node src/app",
