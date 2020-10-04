@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+import { describe, it } from 'mocha';
 import { uploadXL } from '../utils';
 
 const fakeReq = {
@@ -5,15 +7,13 @@ const fakeReq = {
     employees: {
       mv: (path, cb) => {
         return cb(null);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 describe('Excel Tests: ', () => {
-  it('It should upload an excel sheet: ', async (done) => {
+  it('It should upload an excel sheet: ', async () => {
     const fakeErrorRes = uploadXL(fakeReq);
-    expect.assertions(1);
-    expect(fakeErrorRes).toBe(true);
-    done();
+    expect(fakeErrorRes).to.be.equal(true);
   });
 });

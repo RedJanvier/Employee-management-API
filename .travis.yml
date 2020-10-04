@@ -23,7 +23,7 @@ notifications:
   email: false
 
 script:
-  - npm test
+  - npm ci
   - npm run coverage
 
 after_success:

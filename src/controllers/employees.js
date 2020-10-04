@@ -5,7 +5,7 @@ import {
   managerLog,
   uploadXL,
   readXL,
-  ErrorResponse
+  ErrorResponse,
 } from '../utils';
 import { conn as db } from '../config/database';
 import { asyncHandler } from '../middlewares';
@@ -19,12 +19,12 @@ export const create = asyncHandler(async (req, res) => {
   await sendEmail('communication', employee.email);
   managerLog('create', {
     manager: req.decoded.name,
-    employee: employee.name
+    employee: employee.name,
   });
   res.status(201).json({
     success: true,
     message: `Employee ${employee.name} successfully created`,
-    data: employee
+    data: employee,
   });
 });
 
@@ -41,7 +41,7 @@ export const createMany = asyncHandler(async (req, res) => {
         await sendEmail('communication', employee.email);
         managerLog('create', {
           manager: req.decoded.name,
-          employee: employee.name
+          employee: employee.name,
         });
         return employee;
       })
@@ -60,12 +60,12 @@ export const deleteEmployee = asyncHandler(async (req, res) => {
 
   managerLog('delete', {
     manager: req.decoded.name,
-    employee: uuid
+    employee: uuid,
   });
 
   res.status(200).json({
     success: true,
-    message: `${employee} Employees successfully deleted`
+    message: `${employee} Employees successfully deleted`,
   });
 });
 
@@ -83,11 +83,11 @@ export const edit = asyncHandler(async (req, res) => {
   if (!employee) throw new ErrorResponse('Employee not modified', 400);
   managerLog('edit', {
     manager: req.decoded.name,
-    employee: uuid
+    employee: uuid,
   });
   res.status(200).json({
     success: true,
-    message: `Employee successfully modified`
+    message: `Employee successfully modified`,
   });
 });
 
@@ -104,20 +104,20 @@ export const changeStatus = asyncHandler(async (req, res) => {
         replacements: {
           status: status === 'activate' ? 'active' : 'inactive',
           uuid,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
-        type: QueryTypes.UPDATE
+        type: QueryTypes.UPDATE,
       }
     );
-    status = status === 'suspend' ? 'suspende' : '';
+    status = status === 'suspend' ? 'suspende' : status;
     managerLog('status', {
       manager: req.decoded.name,
       status,
-      employee: uuid
+      employee: uuid,
     });
     res.status(201).json({
       success: true,
-      message: `Employee was ${status}d successfully`
+      message: `Employee was ${status}d successfully`,
     });
   } else {
     throw new ErrorResponse('Route does not exist', 404);
@@ -133,14 +133,13 @@ export const search = asyncHandler(async (req, res) => {
   const limit = pageSize;
 
   const where = {};
-  const query = {
-    ...req.query,
-    page: undefined,
-    pageSize: undefined
-  };
+  const { query } = req;
+  delete query.page;
+  delete query.pageSize;
+
   Object.keys(query).map((q) => {
     where[q] = {
-      [Op.iLike]: `%${req.query[q]}%`
+      [Op.iLike]: `%${req.query[q]}%`,
     };
     return true;
   });
@@ -148,14 +147,14 @@ export const search = asyncHandler(async (req, res) => {
   const employees = await Employee.findAll({ offset, limit, where });
   const all = await Employee.findAll({ where });
   managerLog('search', {
-    manager: req.decoded.name
+    manager: req.decoded.name,
   });
   res.status(200).json({
     success: true,
     found: all.length,
     data: employees.map(({ dataValues }) => ({
       ...dataValues,
-      password: null
-    }))
+      password: null,
+    })),
   });
 });

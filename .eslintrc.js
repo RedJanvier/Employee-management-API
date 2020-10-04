@@ -1,13 +1,13 @@
 module.exports = {
   env: {
     es2020: true,
-    node: true
+    node: true,
   },
   extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 11,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   globals: {
     AnalysisView: true,
@@ -15,17 +15,16 @@ module.exports = {
     Prism: true,
     Spinner: true,
     Timer: true,
-    moment: true
+    moment: true,
   },
   rules: {
     'no-console': 'off',
     'import/prefer-default-export': 'off',
     'brace-style': [2, '1tbs', { allowSingleLine: true }],
-    'comma-dangle': [2, 'never'],
     'comma-style': [
       2,
       'first',
-      { exceptions: { ArrayExpression: true, ObjectExpression: true } }
+      { exceptions: { ArrayExpression: true, ObjectExpression: true } },
     ],
     complexity: [2, 6],
     curly: 2,
@@ -37,6 +36,6 @@ module.exports = {
     radix: 2,
     semi: 2,
     'space-infix-ops': 2,
-    strict: 0
-  }
+    strict: 0,
+  },
 };

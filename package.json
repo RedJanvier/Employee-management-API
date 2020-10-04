@@ -4,11 +4,14 @@
   "description": "Task Force challenge number 3",
   "main": "app.js",
   "scripts": {
-    "test": "jest --forceExit",
-    "coverage": "npm run test -- --coverage",
+    "test": "mocha ./src/tests/**.test.js --require @babel/register --exit",
+    "test:jest": "jest --runInBand --detectOpenHandles --forceExit",
+    "coverage": "nyc --reporter=text --reporter=html npm run test",
+    "coverage:jest": "npm run test -- --coverage",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/app",
     "start": "babel-node src/app",
-    "coveralls": "jest --coverage && coveralls < coverage/lcov.info"
+    "coveralls:jest": "jest --coverage && coveralls < coverage/lcov.info",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,7 @@
   },
   "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
   "dependencies": {
+    "@babel/register": "^7.11.5",
     "bcrypt": "^5.0.0",
     "colors": "^1.4.0",
     "cross-env": "^7.0.2",
@@ -46,14 +50,16 @@
     "@babel/node": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
     "@types/uuid": "^8.0.0",
-    "babel-jest": "^26.1.0",
+    "chai": "^4.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "mocha": "^8.1.3",
     "nodemon": "^2.0.2",
+    "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "supertest": "^4.0.2"
   }
