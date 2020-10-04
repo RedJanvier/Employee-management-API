@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { ErrorResponse } from '../utils';
 
 describe('Error Response Tests: ', () => {

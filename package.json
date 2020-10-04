@@ -4,7 +4,7 @@
   "description": "Task Force challenge number 3",
   "main": "app.js",
   "scripts": {
-    "test": "jest --runInBand --forceExit",
+    "test": "jest --forceExit",
     "coverage": "npm run test -- --coverage",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node src/app",
     "start": "babel-node src/app",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3#readme",
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "colors": "^1.4.0",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",

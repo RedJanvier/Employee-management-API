@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { sendEmail } from '../utils';
 import {
   sendCommunication,
