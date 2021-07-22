@@ -43,7 +43,7 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.3",
     "uuid": "^8.2.0",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
