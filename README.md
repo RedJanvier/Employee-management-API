@@ -1,10 +1,10 @@
-# Task-Force---Employee-management-REST-API-Back-End-3
+# Employee-management-API
 
-[![Build Status](https://travis-ci.org/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.svg?branch=develop)](https://travis-ci.org/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3)
-[![Maintainability](https://api.codeclimate.com/v1/badges/19cd4a6e5a087888aa96/maintainability)](https://codeclimate.com/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3/badge.svg?branch=develop)](https://coveralls.io/github/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3?branch=develop)
+[![Build Status](https://travis-ci.org/RedJanvier/Employee-management-API.svg?branch=develop)](https://travis-ci.org/RedJanvier/Employee-management-API)
+[![Maintainability](https://api.codeclimate.com/v1/badges/19cd4a6e5a087888aa96/maintainability)](https://codeclimate.com/github/RedJanvier/Employee-management-API/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/RedJanvier/Employee-management-API/badge.svg?branch=develop)](https://coveralls.io/github/RedJanvier/Employee-management-API?branch=develop)
 
-This is a Task-Force challenge number 3 which was to create an employee management REST API.
+A REST API to manage your employees easily and with bulk add employees and specific employee tracking.
 
 ## Getting Started
 
@@ -32,21 +32,21 @@ A step by step series of examples that tell you how to get a development env run
 
 Clone the Repo with the terminal command:
 
-```
-git clone https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git
+```bash
+git clone https://github.com/RedJanvier/Employee-management-API.git
 ```
 
 then make a file called .env using sample.env by replacing with your own data.
 
 Run the command inside the cloned directory:
 
-```
+```bash
 npm install
 ```
 
 To start the app in development run the command:
 
-```
+```bash
 npm run dev
 ```
 
@@ -61,9 +61,9 @@ npm run dev
 
 ## Author
 
-- **RedJanvier** - _elite-members-api-mongo_ - [RedJanvier](https://github.com/RedJanvier/)
+- **RedJanvier** - _uzakuraHub_ - [RedJanvier](https://redjanvier.uzakurahub.xyzz)
 
-See also the list of [contributors](https://github.com/RedJanvier/Task-Force---Employee-management-REST-API-Back-End-3.git/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/RedJanvier/Employee-management-API.git/contributors) who participated in this project.
 
 ## License
 
