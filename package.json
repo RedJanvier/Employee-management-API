@@ -41,7 +41,7 @@
     "nodemailer": "^6.4.2",
     "pg": "^7.17.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^5.21.3",
+    "sequelize": "^6.29.0",
     "uuid": "^8.2.0",
     "xlsx": "^0.15.6"
   },
